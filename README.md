@@ -733,7 +733,7 @@ Le mot “bash” dans la ligne signifie que le fichier doit être exécuté en 
 
 A partir de là, le scipt monitoring.h va être exécuté toutes les dix minutes (par exemple à 14h10, puis 14h20, puis 14h30, etc). Or le sujet spécifie qu’il doit être exécuté toutes les dix minutes à partir du démarrage du système. Nous allons devoir créer un petit script pour calculer le délai entre l’heure de démarrage du système et la plus proche dizaine de minute pour appliquer ce délai à l’exécution de notre script.
 
-### Créer le script sleep.h
+### Créer le script sleep.sh
 
 Toujours dans le dossier root et en tant qu’utilisateur root, créez un fichier sleep.h contenant le script suivant qui utilise la commande sleep.
 
