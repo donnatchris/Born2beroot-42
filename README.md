@@ -26,6 +26,21 @@ Je suis moi-même au début de mon cursus à 42, j’ai pu commettre des erreurs
 Ce guide n’a pas été écrit à partir de rien. C’est une francisation, un développement (émaillé de nombreuses explications et savoirs glanés de ci de là) et une adaptation aux quelques spécificités imposées par les puces Apple Silicon du guide de **bepoisson (guide** lui-même basé sur le guide de **mcombeau).**
 > 
 
+### A quoi sert une VM?
+
+Les bénéfices d'une machine virtuelle (VM) sont nombreux et offrent plusieurs avantages, notamment :
+
+1. **Isolation** : Les machines virtuelles sont isolées les unes des autres, ce qui permet de séparer différentes applications ou systèmes d'exploitation sur une même machine physique. Cela évite les conflits et les risques de sécurité entre les environnements.
+2. **Utilisation optimisée des ressources** : Une machine physique peut exécuter plusieurs VMs en même temps, ce qui permet d'exploiter pleinement les ressources matérielles, comme le processeur, la mémoire et le stockage, et d'optimiser l'utilisation du serveur.
+3. **Flexibilité et portabilité** : Les VMs sont facilement transférables d'un hôte à un autre. Par exemple, une VM peut être copiée, déplacée ou sauvegardée, ce qui facilite la gestion et la migration des systèmes.
+4. **Sécurité** : L'isolement des VMs permet de réduire l'impact des vulnérabilités. Si une VM est compromise, elle n'affecte généralement pas les autres machines ou l'hôte physique.
+5. **Tests et développement** : Les VMs permettent de créer des environnements de test et de développement indépendants du système principal. Il est facile de tester des applications, des mises à jour ou des configurations sans risquer d'endommager l'environnement de production.
+6. **Snapshots et restauration** : Les VMs peuvent être prises en "snapshot" (instantanés), permettant de sauvegarder l'état d'une machine à un moment donné. En cas de problème, il est possible de restaurer l'état antérieur de la VM rapidement.
+7. **Consolidation des serveurs** : En consolidant plusieurs serveurs sur une même machine physique, une entreprise peut réduire les coûts liés à l'achat et à la gestion de matériel supplémentaire.
+8. **Gestion simplifiée** : Les VMs peuvent être gérées et automatisées à l'aide d'outils de virtualisation, facilitant la création, le déploiement et la gestion des systèmes.
+
+En résumé, les machines virtuelles offrent une grande flexibilité, une meilleure gestion des ressources et une isolation accrue, tout en facilitant les processus de sauvegarde, de test et de déploiement.
+
 # Installer Virtualbox et Debian
 
 ## Un problème d’Architecture
@@ -71,7 +86,7 @@ Debian et Rocky Linux sont deux distributions Linux avec des objectifs différen
 
 **Distribution Linux** : Une distribution comme Debian regroupe le noyau Linux avec tous les outils nécessaires (gestion de paquets, applications, interface graphique) pour rendre l'ordinateur fonctionnel et utilisable par l'utilisateur.
 
-**Une** **image ISO** (ou **fichier ISO**) est une copie exacte d'un **disque optique** (comme un CD, DVD ou Blu-ray) sous forme de fichier informatique unique. Le terme **ISO** vient du format standard de l'International Organization for Standardization (ISO 9660), qui est utilisé pour organiser les fichiers sur des disques optiques. Il peut être monté directement sur un ordinateur ou gravé sur un disque physique. Une imge ISO permet de distribuer des systèmes d'exploitation, des logiciels, ou des sauvegardes de manière pratique sans nécessiter un support physique.
+**Une** **image ISO** (ou **fichier ISO**) est une copie exacte d'un **disque optique** (comme un CD, DVD ou Blu-ray) sous forme de fichier informatique unique. Le terme **ISO** vient du format standard de l'International Organization for Standardization (ISO 9660), qui est utilisé pour organiser les fichiers sur des disques optiques. Il peut être monté directement sur un ordinateur ou gravé sur un disque physique. Une image ISO permet de distribuer des systèmes d'exploitation, des logiciels, ou des sauvegardes de manière pratique sans nécessiter un support physique.
 
 **CD ou DVD?** La principale différence entre une **image ISO CD** et une **image ISO DVD** de **Debian** réside dans la quantité de logiciels inclus. L'**ISO CD** contient une version minimale du système Debian, avec seulement les composants essentiels pour démarrer l'installation, tandis que l'**ISO DVD** inclut une installation plus complète, avec plusieurs environnements de bureau et une gamme étendue de logiciels. En résumé, l'ISO CD est idéale pour une installation de base nécessitant une connexion Internet pour les paquets supplémentaires, tandis que l'ISO DVD permet une installation complète sans connexion Internet. Pour notre projet, l’image CD est suffisante pour peux qu’on ait une connexion internet pour télécharger les paquets supplémentaires.
 
@@ -433,15 +448,15 @@ PASS_WARN_AGE 7
 
 **Les changements ne s’appliquent pas automatiquement aux utilisateurs existants,** il faut donc utiliser la commande **`chage`** pour faire les changements sur les utilisateurs existants (avec sudo).
 
-**`sudo chage -m  <username>`**  le mot de passe doit être changé tous les 30 jours
+**`sudo chage -M 30 <username>`**  le mot de passe doit être changé tous les 30 jours
 
-**`sudo chage -M 30 <username>`**  il doit y avoir 2 jours minimum entre chaque changement de mot de passe
+**`sudo chage -m 2 <username>`**  il doit y avoir 2 jours minimum entre chaque changement de mot de passe
 
 **`sudo chage -W 7 <username>`**  l’utilisateur sera averti 7 jours avant expiration
 
 **`chage -l <username>`**  voir les paramètres de mot de passe appliqués à l’utilisateur <username>
 
-### La bibiolthèque libpwquality
+### La bibliothèque libpwquality
 
 Le fichier **`pwquality.conf`** est un fichier de configuration utilisé par la bibliothèque **libpwquality**, qui est responsable de la gestion des politiques de qualité des mots de passe sous Linux. Ce fichier permet d'appliquer des règles de sécurité aux mots de passe afin d'assurer qu'ils répondent à certains critères de complexité.
 
@@ -483,15 +498,80 @@ enforce_for_root
 
 ```
 
-**`sudo passwd <username>`**  permet de modifier le mot de passe de l’utilisateur <username>
+### Modifier les règles pour le superutilisateur root
 
-## Autres commandes à connaître pour l’évaluation
+Le superutilisateur root doit être soumis aux même règles de mot de passe sauf en ce qui concerne le “difok” (le nombre de caractères dans le nouveau mot de passe qui ne doivent pas être présent dans l’ancien).
+
+**Vous devez donc créer un fichier spécifique pour root:**
+
+ **`/etc/security/pwquality-root.conf`**
+
+et l’éditer avec nano pour qu’il soit identique au **`pwquality.conf`**  à l’exception de la ligne concernant “difok” puisque nous ne voulons pas imposer de règle à ce paramètre.
+
+```bash
+# Number of characters in the new password that must not be present in the 
+# old password.
+# difok = 0
+# The minimum acceptable size for the new password (plus one if 
+# credits are not disabled which is the default)
+minlen = 10
+# The maximum credit for having digits in the new password. If less than 0 
+# it is the minimun number of digits in the new password.
+dcredit = -1
+# The maximum credit for having uppercase characters in the new password. 
+# If less than 0 it is the minimun number of uppercase characters in the new 
+# password.
+ucredit = -1
+# ...
+# The maximum number of allowed consecutive same characters in the new password.
+# The check is disabled if the value is 0.
+maxrepeat = 3
+# ...
+# Whether to check it it contains the user name in some form.
+# The check is disabled if the value is 0.
+usercheck = 1
+# ...
+# Prompt user at most N times before returning with error. The default is 1.
+retry = 3
+# Enforces pwquality checks on the root user password.
+# Enabled if the option is present.
+enforce_for_root
+# ...
+
+```
+
+**Modifier le fichier PAM pour distinguer root des autres utilisateurs:**
+
+Éditez le fichier PAM `/etc/pam.d/common-password` (avec **`sudo`**  pour pouvoir écrire) et juste **au-dessus** de la ligne:
+
+```bash
+password	requisite			pam_pwquality.so retry=3
+```
+
+ajoutez les lignes suivantes:
+
+```bash
+# verify if user is root:
+auth [success=1 default=ignore] pam_succeed_if.so uid=0
+# if user is root:
+password	requisite			pam_pwquality.so retry=3 conf=/etc/security/pwquality-root.conf
+```
+
+Ainsi si l'utilisateur est **root**, le système va utiliser les règles définies dans le fichier **`/etc/security/pwquality-root.conf`**  au lieu de **`/etc/security/pwquality.conf`** 
+
+La configuration de la politique de mot de passe est terminée, vous pouvez modifier les mots de passe existants pour qu’ils soient conforme à la nouvelle politique de mot de passe avec la commande: **`sudo passwd <username>`**  
+
+### C’est quoi PAM?
+
+PAM (**Pluggable Authentication Modules**) est un système modulaire utilisé sur les systèmes Unix/Linux pour gérer l'authentification. Il permet d'intégrer différentes méthodes d'authentification (mots de passe, biométrie, clés SSH, etc.) et de configurer des règles de sécurité de manière centralisée pour les applications et services.
+
+## Autres commandes à connaître
 
 Les commandes pour gérer les utilisateurs nécessitent l’emploie de **`sudo`  dans la plupart des cas (à partir du moment où la commande modifie quelque chose).**
 
 ### Nom d’hôte
 
-**`sudo hostnamectl ste-hostname <new_hostname>`** changer le nom d’hôte en <new_hostname>
+**`sudo hostnamectl set-hostname <new_hostname>`** changer le nom d’hôte en <new_hostname>
 
 **`hostnamectl status`** affiche les informations du système
 
@@ -771,3 +851,25 @@ Cette ligne dans le fichier crontab va exécuter deux scripts à intervalles ré
 - **`bash /root/monitoring.sh`** : Le script `/root/monitoring.sh` sera exécuté **uniquement si** le premier script s'est terminé avec succès.
 
 En résumé, cette ligne va lancer le script `sleep.sh` toutes les 10 minutes, et si ce script réussit (après avoir appliqué le délai imposé par la commande sleep), il lancera  `monitoring.sh` .
+
+## Le fichier signature.txt
+
+**Pour créer le fichier** il suffit d’aller dans le répertoire où est stockées la VM et d’exécuter **`shasum` sur le fichier .vdi de votre VM.**
+
+### C’est quoi shasum?
+
+**Shasum** est une commande utilisée pour calculer et vérifier les empreintes cryptographiques (ou "hashes") de fichiers, en utilisant des algorithmes SHA (Secure Hash Algorithm) comme SHA-1, SHA-256, etc. Elle sert principalement à vérifier l'intégrité et l'authenticité des fichiers. Elle crée un hash, qui est une empreinte numérique unique générée à partir de données, utilisée pour vérifier l'intégrité ou l'authenticité.
+
+C’est quoi un fichier VDI?
+
+**U**n fichier **VDI** (Virtual Disk Image) est un format de fichier utilisé par **VirtualBox** pour représenter un disque dur virtuel. Ce fichier contient toutes les données du système invité (comme un disque dur réel) et permet à la machine virtuelle d’accéder à un espace de stockage pour son système d'exploitation et ses fichiers.
+
+**`~/Virtualbox VMS`**  est le répertoire de destination par défaut des VM sur Mac. Votre VM sera donc stockée dans le répertoire **`~/Virtualbox VMS/NomDeLaVM`** 
+
+**`shasum NomDeLaVm.vdi > signature.txt`**  est la commande à exécuter pour créer l’empreinte de votre fichier et la stocker dans le fichier signature.txt (que sera créé en exécutant cette commande). La sortie de shasum stockée dans signature.txt sera le hash (une chaîne alphanumérique) suivi du nom du fichier analysé (si l’exécution de la commande prend un peu de temps, pas d’affolement, c’est normal). Par exemple:
+
+a933ad77674444661a25fea08af33154550ddef7  Born2beroot.vdi
+
+**Pour comparer le fichier** avec sa signature, il suffira d’exécuter  **`shasum`** avec ****l’option **`-c`** suivi du nom du fichier signature (**`signature.txt`** en l’occurence).
+
+La commande **`shasum -c signature.txt`** permet ainsi  de vérifier l'intégrité d'un fichier en comparant son hash avec celui stocké dans un fichier de signature. Lors de la vérification, si le hash correspond, la commande affichera **`fichier.txt: OK`**, sinon une erreur indiquera que le fichier a été modifié.
