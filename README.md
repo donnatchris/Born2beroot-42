@@ -328,6 +328,19 @@ Defaults     requiretty
 
 **UFW (Uncomplicated Firewall)** est un outil de gestion de pare-feu pour les systèmes Linux. Il simplifie la configuration des règles de filtrage réseau, permettant aux utilisateurs de définir facilement quelles connexions réseau sont autorisées ou bloquées sur un système. Il est conçu pour être facile à utiliser tout en étant puissant, et est souvent utilisé sur des distributions comme Ubuntu.
 
+### C’est quoi AppArmor?
+
+AppArmor (**Application Armor**) est un module de sécurité pour Linux qui applique des politiques de contrôle d'accès obligatoires (MAC). Il limite les actions que les applications peuvent effectuer en définissant des profils qui spécifient les fichiers, réseaux et ressources auxquels elles peuvent accéder. Cela permet de réduire les risques liés à des comportements malveillants ou à des vulnérabilités.
+
+### Quelle différence entre AppArmor et UFW?
+
+Ce sont deux outils de sécurité distincts, mais ils complètent la protection globale d'un système Linux.
+
+- **UFW** se concentre sur la gestion des connexions réseau en configurant des règles de pare-feu pour autoriser ou bloquer le trafic entrant et sortant sur des ports spécifiques.
+- **AppArmor** protège les applications en restreignant les ressources système qu'elles peuvent utiliser, comme les fichiers, la mémoire, ou les périphériques.
+
+Bien qu'il n'y ait pas de lien direct entre eux, ils peuvent être utilisés ensemble pour renforcer la sécurité. Par exemple, UFW contrôle l'accès réseau tandis qu'AppArmor restreint les comportements des applications exposées au réseau.
+
 **`sudo apt install ufw`**  installe ufw
 
 **`sudo ufw enable`**  active ufw
@@ -335,6 +348,8 @@ Defaults     requiretty
 **`sudo ufw status`**  vérifie le statut pour s’assurer qu’il est activé
 
 **`sudo systemctl enable ufw`**  configure ufw pour qu’il se lance automatiquement au démarrage du système
+
+### C’est quoi systemctl?
 
 La commande `systemctl` est un outil de gestion du système et des services sous Linux. Elle permet de démarrer, arrêter, redémarrer, activer, désactiver, et vérifier le statut des services (ou unités) système. Elle est utilisée pour interagir avec le système d'initialisation **systemd**, qui gère les processus système et les services.
 
