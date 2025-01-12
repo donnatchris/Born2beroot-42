@@ -1,4 +1,24 @@
-# Born to be root sur Apple Silicon (M1, M2, etc)
+# PROJECT BORN2BEROOT FROM 42
+By chdonnat (Christophe Donnat from 42 Perpignan, France)
+
+There is quite a lot of documentation available online for this project. Therefore, I decided to create a guide with the following specifics:
+- A guide in French
+- That explains the fundamental concepts
+- And that addresses the specifics of the project for the ARM 64 architecture (in my case, on a MacBook with an M1 chip)
+
+## AIM OF THE PROJECT
+e goal of this project is to create a virtual machine using VirtualBox (or UTM)
+in order to install a Debian server while adhering to a set of specific rules related to the topic.
+
+## BONUS
+Bonus list:
+- Properly set up partitions to achieve a structure similar to the example provided in the project description.
+- Set up a functional WordPress website with services such as lighttpd, MariaDB, and PHP.
+- Set up a service that you find useful (NGINX/Apache2 excluded!). During the defense, you will need to justify your choice.
+
+**Note:** For this project, I only completed the first bonus.
+
+# GUIDE POUR LE PROJET BORN TO BE ROOT SUR MACBOOK
 
 Si vous essayez de réaliser le projet Born to be root sur un Macbook (ou tout appareil équipé de puce Apple Silicon de type M1, M2, etc) en suivant les tutos disponibles sur internet, vous allez vous rendre compte que vous ne pouvez pas appliquer leurs instructions telles quelles.
 
