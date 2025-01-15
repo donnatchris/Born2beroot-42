@@ -1,8 +1,6 @@
 # PROJECT BORN2BEROOT FROM 42
 By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
-![Born 2 be Root](https://m.media-amazon.com/images/I/51wwQPmkhCL._AC_UF1000,1000_QL80_.jpg)
-
 There is quite a lot of documentation available online for this project. Therefore, I decided to create a guide with the following specifics:
 - A guide in French
 - That explains the fundamental concepts
