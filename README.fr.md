@@ -1,7 +1,7 @@
+##### [🇫🇷 Version française](README.fr.md) / [🇬🇧 English version](README.md)
+
 # PROJECT BORN2BEROOT FROM 42
 Par chdonnat (Christophe Donnat de 42 Perpignan, France)
-
-[🇬🇧 Go to English version](README.md)
 
 Il existe déjà beaucoup de documentation en ligne pour ce projet.
 J’ai donc choisi de créer un guide avec les spécificités suivantes :
