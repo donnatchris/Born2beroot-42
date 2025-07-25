@@ -1,8 +1,10 @@
 # BORN2BEROOT PROJECT FROM 42
 By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
+[🇫🇷 Voir la version française](README.fr.md)  
+
 There is quite a lot of documentation available online for this project. Therefore, I decided to create a guide with the following specifics:
-- A guide originally in French
+- A guide in English and in French
 - That explains the fundamental concepts
 - And that addresses the specifics of the project for the ARM 64 architecture (in my case, on a MacBook with an M1 chip)
 
