@@ -89,7 +89,7 @@ Télécharger et installer VirtualBox est la première étape**.** C’est ce qu
 
 <aside>
 
-Sur le site https://www.virtualbox.org/wiki/Downloads téléchargez la version [macOS / Apple Silicon hosts](https://download.virtualbox.org/virtualbox/7.1.4/VirtualBox-7.1.4-165100-macOSArm64.dmg)** puis installez la sur votre machine.
+Sur le site https://www.virtualbox.org/wiki/Downloads téléchargez la version [macOS / Apple Silicon hosts](https://download.virtualbox.org/virtualbox/7.1.4/VirtualBox-7.1.4-165100-macOSArm64.dmg) puis installez la sur votre machine.
 
 </aside>
 
