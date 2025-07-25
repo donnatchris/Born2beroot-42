@@ -1,22 +1,27 @@
 # PROJECT BORN2BEROOT FROM 42
-By chdonnat (Christophe Donnat from 42 Perpignan, France)
+Par chdonnat (Christophe Donnat de 42 Perpignan, France)
 
-There is quite a lot of documentation available online for this project. Therefore, I decided to create a guide with the following specifics:
-- A guide in French
-- That explains the fundamental concepts
-- And that addresses the specifics of the project for the ARM 64 architecture (in my case, on a MacBook with an M1 chip)
+[🇬🇧 Go to English version](README.md)
 
-## AIM OF THE PROJECT
-e goal of this project is to create a virtual machine using VirtualBox (or UTM)
-in order to install a Debian server while adhering to a set of specific rules related to the topic.
+Il existe déjà beaucoup de documentation en ligne pour ce projet.
+J’ai donc choisi de créer un guide avec les spécificités suivantes :
+- Un guide en français
+- Qui explique les concepts fondamentaux
+- Et qui aborde les particularités du projet sur une architecture ARM 64 (dans mon cas, sur un MacBook avec une puce M1)
+
+## OBJECTIF DU PROJET
+
+L’objectif de ce projet est de créer une machine virtuelle à l’aide de VirtualBox (ou UTM),  
+afin d’installer un serveur Debian en respectant un ensemble de règles précises définies dans le sujet.
 
 ## BONUS
-Bonus list:
-- Properly set up partitions to achieve a structure similar to the example provided in the project description.
-- Set up a functional WordPress website with services such as lighttpd, MariaDB, and PHP.
-- Set up a service that you find useful (NGINX/Apache2 excluded!). During the defense, you will need to justify your choice.
 
-**Note:** For this project, I only completed the first bonus.
+Liste des bonus :
+- Configurer correctement les partitions pour obtenir une structure similaire à celle proposée en exemple dans le sujet.
+- Mettre en place un site WordPress fonctionnel avec des services comme lighttpd, MariaDB et PHP.
+- Mettre en place un service que tu trouves utile (**NGINX/Apache2 interdits !**) — tu devras justifier ton choix lors de la soutenance.
+
+**Remarque :** Pour ce projet, je n’ai réalisé que le **premier bonus**.
 
 # GUIDE POUR LE PROJET BORN TO BE ROOT SUR MACBOOK
 
