@@ -1,14 +1,13 @@
-# PROJECT BORN2BEROOT FROM 42
+# BORN2BEROOT PROJECT FROM 42
 By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
 There is quite a lot of documentation available online for this project. Therefore, I decided to create a guide with the following specifics:
-- A guide in French
+- A guide originally in French
 - That explains the fundamental concepts
 - And that addresses the specifics of the project for the ARM 64 architecture (in my case, on a MacBook with an M1 chip)
 
 ## AIM OF THE PROJECT
-e goal of this project is to create a virtual machine using VirtualBox (or UTM)
-in order to install a Debian server while adhering to a set of specific rules related to the topic.
+The goal of this project is to create a virtual machine using VirtualBox (or UTM) in order to install a Debian server while adhering to a set of specific rules related to the topic.
 
 ## BONUS
 Bonus list:
@@ -18,488 +17,488 @@ Bonus list:
 
 **Note:** For this project, I only completed the first bonus.
 
-# GUIDE POUR LE PROJET BORN TO BE ROOT SUR MACBOOK
+# GUIDE FOR THE BORN TO BE ROOT PROJECT ON A MACBOOK
 
-Si vous essayez de réaliser le projet Born to be root sur un Macbook (ou tout appareil équipé de puce Apple Silicon de type M1, M2, etc) en suivant les tutos disponibles sur internet, vous allez vous rendre compte que vous ne pouvez pas appliquer leurs instructions telles quelles.
+If you are trying to complete the Born to be root project on a Macbook (or any device with an Apple Silicon chip like M1, M2, etc.) by following the tutorials available online, you will realize that you cannot apply their instructions as they are.
 
-Après avoir passé quelques jours à chercher à comprendre ce qui m’empêchait de suivre aveuglément ces tutos, j’ai accumulé quelques connaissances bien utiles que je me propose de vous partager.
+After spending a few days trying to understand what was preventing me from blindly following these tutorials, I have gathered some very useful knowledge that I would like to share with you.
 
-Les spécificités imposées par les puces M1 n’étant finalement pas très nombreuses, ce guide, et surtout les informations qu’il contient, pourra vous être utiles même si vous réalisez le projet à partir d’un ordinateur windows ou autre.
+Since the specifics imposed by the M1 chips are not very numerous, this guide, and especially the information it contains, may be useful to you even if you are doing the project on a Windows computer or another machine.
 
-Le but de ce guide n’est pas tant de vous donner une marche à suivre précise que de vous apporter les connaissances qui vous permettront de réaliser le projet par vous même en vous exposant:
+The purpose of this guide is not so much to give you a precise procedure to follow, but to provide you with the knowledge that will allow you to carry out the project on your own by explaining:
 
-- les étapes pour réaliser le projet
-- les particularités dues aux Macbook et assimilés
-- les connaissances nécessaires pour réaliser le projet
-- les commandes linux employées dans le projet
-- le tout en français (avec toutefois certains terme techniques traduits en anglais)
+- the steps to complete the project
+- the particularities due to Macbooks and similar devices
+- the necessary knowledge to complete the project
+- the linux commands used in the project
+- This guide was originally written in French.
 
 <aside>
 
-### Avertissement
+### Disclaimer
 
-Je suis moi-même au début de mon cursus à 42, j’ai pu commettre des erreurs ou des imprécisions, n’hésitez pas le cas échéant à me contacter afin que je puisse corriger ce qui doit l’être.
+I am myself at the beginning of my curriculum at 42, I may have made mistakes or inaccuracies, do not hesitate to contact me if necessary so that I can correct what needs to be corrected.
 
 </aside>
 
-> **Rendons à Cesar…**
-Ce guide n’a pas été écrit à partir de rien. C’est une francisation, un développement (émaillé de nombreuses explications et savoirs glanés de ci de là) et une adaptation aux quelques spécificités imposées par les puces Apple Silicon du guide de **bepoisson (guide** lui-même basé sur le guide de **mcombeau).**
+> **Let's give credit where credit is due...**
+This guide was not written from scratch. It is a French version, a development (sprinkled with many explanations and knowledge gleaned from here and there) and an adaptation to the few specifics imposed by the Apple Silicon chips of the guide by **bepoisson (guide** itself based on the guide by **mcombeau).**
 > 
 
-### A quoi sert une VM?
+### What is a VM for?
 
-Les bénéfices d'une machine virtuelle (VM) sont nombreux et offrent plusieurs avantages, notamment :
+The benefits of a virtual machine (VM) are numerous and offer several advantages, including:
 
-1. **Isolation** : Les machines virtuelles sont isolées les unes des autres, ce qui permet de séparer différentes applications ou systèmes d'exploitation sur une même machine physique. Cela évite les conflits et les risques de sécurité entre les environnements.
-2. **Utilisation optimisée des ressources** : Une machine physique peut exécuter plusieurs VMs en même temps, ce qui permet d'exploiter pleinement les ressources matérielles, comme le processeur, la mémoire et le stockage, et d'optimiser l'utilisation du serveur.
-3. **Flexibilité et portabilité** : Les VMs sont facilement transférables d'un hôte à un autre. Par exemple, une VM peut être copiée, déplacée ou sauvegardée, ce qui facilite la gestion et la migration des systèmes.
-4. **Sécurité** : L'isolement des VMs permet de réduire l'impact des vulnérabilités. Si une VM est compromise, elle n'affecte généralement pas les autres machines ou l'hôte physique.
-5. **Tests et développement** : Les VMs permettent de créer des environnements de test et de développement indépendants du système principal. Il est facile de tester des applications, des mises à jour ou des configurations sans risquer d'endommager l'environnement de production.
-6. **Snapshots et restauration** : Les VMs peuvent être prises en "snapshot" (instantanés), permettant de sauvegarder l'état d'une machine à un moment donné. En cas de problème, il est possible de restaurer l'état antérieur de la VM rapidement.
-7. **Consolidation des serveurs** : En consolidant plusieurs serveurs sur une même machine physique, une entreprise peut réduire les coûts liés à l'achat et à la gestion de matériel supplémentaire.
-8. **Gestion simplifiée** : Les VMs peuvent être gérées et automatisées à l'aide d'outils de virtualisation, facilitant la création, le déploiement et la gestion des systèmes.
+1.  **Isolation**: Virtual machines are isolated from each other, which allows for the separation of different applications or operating systems on the same physical machine. This prevents conflicts and security risks between environments.
+2.  **Optimized resource utilization**: A physical machine can run multiple VMs at the same time, which allows for full utilization of hardware resources, such as the processor, memory, and storage, and optimizes server usage.
+3.  **Flexibility and portability**: VMs are easily transferable from one host to another. For example, a VM can be copied, moved, or backed up, which facilitates system management and migration.
+4.  **Security**: The isolation of VMs helps to reduce the impact of vulnerabilities. If a VM is compromised, it generally does not affect other machines or the physical host.
+5.  **Testing and development**: VMs allow for the creation of test and development environments that are independent of the main system. It is easy to test applications, updates, or configurations without risking damage to the production environment.
+6.  **Snapshots and restoration**: VMs can be "snapshotted," allowing the state of a machine to be saved at a given moment. In case of a problem, it is possible to quickly restore the previous state of the VM.
+7.  **Server consolidation**: By consolidating multiple servers on a single physical machine, a company can reduce costs related to purchasing and managing additional hardware.
+8.  **Simplified management**: VMs can be managed and automated using virtualization tools, facilitating the creation, deployment, and management of systems.
 
-En résumé, les machines virtuelles offrent une grande flexibilité, une meilleure gestion des ressources et une isolation accrue, tout en facilitant les processus de sauvegarde, de test et de déploiement.
+In summary, virtual machines offer great flexibility, better resource management, and increased isolation, while facilitating backup, testing, and deployment processes.
 
-# Installer Virtualbox et Debian
+# Install Virtualbox and Debian
 
-## Un problème d’Architecture
+## An Architecture Problem
 
-**L'architecture** en informatique désigne la structure et le design d'un système, qu'il soit matériel (comme un processeur) ou logiciel. Elle définit la manière dont les composants (CPU, mémoire, bus, etc.) interagissent et les instructions que l'appareil peut comprendre.
+**Architecture** in computing refers to the structure and design of a system, whether it is hardware (like a processor) or software. It defines how components (CPU, memory, bus, etc.) interact and the instructions that the device can understand.
 
-**AMD64:** L’architecture dominante pour les PC Windows moderne est l’architecture **x86-64** (aussi appelée **AMD 64**). Elle prend en charge les applications 64 bits, tout en restant compatible avec les anciennes applications 32 bits (x86).
+**AMD64:** The dominant architecture for modern Windows PCs is the **x86-64** architecture (also called **AMD 64**). It supports 64-bit applications, while remaining compatible with older 32-bit (x86) applications.
 
-**ARM64**: L'architecture **ARM64** (ou **AArch64**) est une architecture de processeur 64 bits développée par ARM. Elle est couramment utilisée dans les smartphones, tablettes, appareils IoT, et plus récemment dans les ordinateurs (comme les Mac avec puces M1/M2).
+**ARM64**: The **ARM64** (or **AArch64**) architecture is a 64-bit processor architecture developed by ARM. It is commonly used in smartphones, tablets, IoT devices, and more recently in computers (like Macs with M1/M2 chips).
 
-Certains processeurs ARM64 incluent un mode appelé AArch32 qui permet d’exécuter des instructions 32 bits pour des applications conçues pour l’architecture ARM (ARMv7 par exemple), mais les processeurs **Apple Silicon** (M1, M2), basés sur ARM64, ne prennent **pas en charge les instructions ARM 32 bits (AArch32)**, marquant une transition vers un environnement purement 64 bits.
-La plupart des logiciels populaires bénéficient d’une version pour chaque architecture, mais ce n’est pas toujours le cas.
+Some ARM64 processors include a mode called AArch32 that allows running 32-bit instructions for applications designed for the ARM architecture (ARMv7 for example), but **Apple Silicon** (M1, M2) processors, based on ARM64, do **not support 32-bit ARM instructions (AArch32)**, marking a transition to a purely 64-bit environment.
+Most popular software has a version for each architecture, but this is not always the case.
 
 ## VirtualBox
 
-Télécharger et installer VirtualBox est la première étape**.** C’est ce qu’on appelle un **hyperviseur** (*hypervisor*): 
+Downloading and installing VirtualBox is the first step. It is what is called a **hypervisor**:
 
-**Hyperviseur:** La fonction des hyperviseurs est de **créer et gérer des machines virtuelles** en permettant à plusieurs systèmes d'exploitation de s'exécuter simultanément sur une même machine physique, en isolant leurs ressources.
+**Hypervisor:** The function of hypervisors is to **create and manage virtual machines** by allowing multiple operating systems to run simultaneously on a single physical machine, isolating their resources.
 
-**UTM**: L’environnement Mac dispose d’un hyperviseur dédié: **UTM.** J’ai toutefois décidé d’utiliser VirtualBox malgré tout afin de coller au plus près des outils employés par la majorité des étudiants.
+**UTM**: The Mac environment has a dedicated hypervisor: **UTM.** However, I decided to use VirtualBox anyway to stick as closely as possible to the tools used by the majority of students.
 
 <aside>
 
-Sur le site https://www.virtualbox.org/wiki/Downloads téléchargez la version [**macOS / Apple Silicon hosts](https://download.virtualbox.org/virtualbox/7.1.4/VirtualBox-7.1.4-165100-macOSArm64.dmg)** puis installez la sur votre machine.
+On the website https://www.virtualbox.org/wiki/Downloads download the [**macOS / Apple Silicon hosts**](https://download.virtualbox.org/virtualbox/7.1.4/VirtualBox-7.1.4-165100-macOSArm64.dmg) version and then install it on your machine.
 
 </aside>
 
 ## Debian
 
-Télécharger l’image ISO de Debian est l’étape suivante.
+Downloading the Debian ISO image is the next step.
 
-**Debian** est une **distribution Linux** (ou "distro") très populaire, connue pour sa stabilité, sa flexibilité et son large éventail de logiciels. Elle est l'une des distributions les plus anciennes et sert de base pour de nombreuses autres distributions, dont **Ubuntu**, **Linux Mint**, et **Raspbian**.
+**Debian** is a very popular **Linux distribution** (or "distro"), known for its stability, flexibility, and wide range of software. It is one of the oldest distributions and serves as a base for many other distributions, including **Ubuntu**, **Linux Mint**, and **Raspbian**.
 
-### **Quelles différences entre Debian et Rocky?**
+### **What are the differences between Debian and Rocky?**
 
-Debian et Rocky Linux sont deux distributions Linux avec des objectifs différents. **Debian** est communautaire, polyvalente, et axée sur la liberté logicielle, avec un large support d'architectures et un vaste choix de logiciels. Elle convient aux serveurs, postes de travail, et projets personnels. **Rocky Linux**, en revanche, est orientée entreprise, conçue comme une alternative gratuite et stable à Red Hat Enterprise Linux (RHEL). Elle se concentre sur les environnements professionnels avec un support long terme et une compatibilité RHEL. Debian est idéale pour les projets flexibles, tandis que Rocky est parfaite pour les systèmes critiques en entreprise.
+Debian and Rocky Linux are two Linux distributions with different goals. **Debian** is community-driven, versatile, and focused on software freedom, with broad architecture support and a vast choice of software. It is suitable for servers, workstations, and personal projects. **Rocky Linux**, on the other hand, is enterprise-oriented, designed as a free and stable alternative to Red Hat Enterprise Linux (RHEL). It focuses on professional environments with long-term support and RHEL compatibility. Debian is ideal for flexible projects, while Rocky is perfect for critical enterprise systems.
 
-**RHEL** (Red Hat Enterprise Linux) est une distribution Linux commerciale développée par **Red Hat**, conçue pour les entreprises et les environnements professionnels. Elle est réputée pour sa stabilité, son support technique, et ses mises à jour de sécurité à long terme, ce qui la rend idéale pour les systèmes critiques comme les serveurs, les bases de données ou les applications métier.
+**RHEL** (Red Hat Enterprise Linux) is a commercial Linux distribution developed by **Red Hat**, designed for businesses and professional environments. It is renowned for its stability, technical support, and long-term security updates, making it ideal for critical systems like servers, databases, or business applications.
 
-### Noyau Linux et distribution Linux :
+### Linux kernel and Linux distribution:
 
-**Noyau Linux** : C'est la partie centrale du système d'exploitation qui gère les interactions entre le matériel et le logiciel. Il peut fonctionner seul, mais il ne constitue pas un système complet utilisable.
+**Linux Kernel**: This is the central part of the operating system that manages the interactions between hardware and software. It can run on its own, but it does not constitute a complete usable system.
 
-**Distribution Linux** : Une distribution comme Debian regroupe le noyau Linux avec tous les outils nécessaires (gestion de paquets, applications, interface graphique) pour rendre l'ordinateur fonctionnel et utilisable par l'utilisateur.
+**Linux Distribution**: A distribution like Debian bundles the Linux kernel with all the necessary tools (package management, applications, graphical interface) to make the computer functional and usable by the user.
 
-**Une** **image ISO** (ou **fichier ISO**) est une copie exacte d'un **disque optique** (comme un CD, DVD ou Blu-ray) sous forme de fichier informatique unique. Le terme **ISO** vient du format standard de l'International Organization for Standardization (ISO 9660), qui est utilisé pour organiser les fichiers sur des disques optiques. Il peut être monté directement sur un ordinateur ou gravé sur un disque physique. Une image ISO permet de distribuer des systèmes d'exploitation, des logiciels, ou des sauvegardes de manière pratique sans nécessiter un support physique.
+**An ISO image** (or **ISO file**) is an exact copy of an **optical disc** (like a CD, DVD, or Blu-ray) in the form of a single computer file. The term **ISO** comes from the standard format of the International Organization for Standardization (ISO 9660), which is used to organize files on optical discs. It can be mounted directly on a computer or burned to a physical disc. An ISO image allows for the convenient distribution of operating systems, software, or backups without needing a physical medium.
 
-**CD ou DVD?** La principale différence entre une **image ISO CD** et une **image ISO DVD** de **Debian** réside dans la quantité de logiciels inclus. L'**ISO CD** contient une version minimale du système Debian, avec seulement les composants essentiels pour démarrer l'installation, tandis que l'**ISO DVD** inclut une installation plus complète, avec plusieurs environnements de bureau et une gamme étendue de logiciels. En résumé, l'ISO CD est idéale pour une installation de base nécessitant une connexion Internet pour les paquets supplémentaires, tandis que l'ISO DVD permet une installation complète sans connexion Internet. Pour notre projet, l’image CD est suffisante pour peux qu’on ait une connexion internet pour télécharger les paquets supplémentaires.
+**CD or DVD?** The main difference between a **CD ISO image** and a **DVD ISO image** of **Debian** lies in the amount of software included. The **CD ISO** contains a minimal version of the Debian system, with only the essential components to start the installation, while the **DVD ISO** includes a more complete installation, with several desktop environments and an extensive range of software. In summary, the CD ISO is ideal for a basic installation requiring an internet connection for additional packages, while the DVD ISO allows for a complete installation without an internet connection. For our project, the CD image is sufficient as long as we have an internet connection to download additional packages.
 
 <aside>
 
-Sur le site de Debian https://www.debian.org/ il ne faut pas télécharger le fichier depuis la page d’accueil (car c’est une image ISO pour architecture AMD 64); il faut aller dans A*utre* *téléchargement* puis *Téléchargement depuis les miroirs* et sélectionner un miroir situé proche de chez vous (en France pour moi), puis choisir une image ISO arm64 de la dernière version stable de Debian (Debian 12.8.0 à l’heure où j’écris). Le version cd est suffisante, comme celle que vous trouverez à la dernière ligne de cette page: https://debian.obspm.fr/debian-cd/current/arm64/iso-cd/
+On the Debian website https://www.debian.org/ you should not download the file from the homepage (as it is an ISO image for the AMD 64 architecture); you must go to *Other downloads* then *Download from mirrors* and select a mirror located near you (in France for me), then choose an arm64 ISO image of the latest stable version of Debian (Debian 12.8.0 at the time of writing). The cd version is sufficient, like the one you will find on the last line of this page: https://debian.obspm.fr/debian-cd/current/arm64/iso-cd/
 
 </aside>
 
-## Bios et UEFI
+## Bios and UEFI
 
-Le **BIOS** (Basic Input/Output System) et **UEFI** (Unified Extensible Firmware Interface) sont deux types de **firmware** (logiciels intégrés dans le matériel informatique) qui sont responsables du démarrage et de l'initialisation du système d'exploitation sur un ordinateur. Bien qu'ils remplissent une fonction similaire, il existe des différences importantes entre eux.
+**BIOS** (Basic Input/Output System) and **UEFI** (Unified Extensible Firmware Interface) are two types of **firmware** (software integrated into computer hardware) that are responsible for starting and initializing the operating system on a computer. Although they perform a similar function, there are important differences between them.
 
-- **Le BIOS** est un ancien firmware utilisé pour démarrer un ordinateur. Le BIOS utilise le **MBR** pour gérer la table des partitions d'un disque dur. Il a une interface texte et est plus lent. Il est encore présent sur beaucoup de systèmes aujourd'hui, mais il est limité par son ancienneté et ses capacités.
-- **Le UEFI** est un firmware moderne qui remplace le BIOS. L'UEFI utilise la **GPT** (GUID Partition Table) pour gérer les partitions d'un disque. L’UEFI permet d’avoir une interface graphique et un démarrage plus rapide, et inclut des fonctionnalités de sécurité avancées comme le **Secure Boot**. L'UEFI est compatible avec des systèmes modernes comme ceux à base de **processeurs ARM**, **MacBook avec processeurs M1**, et les architectures **64 bits**.
+-   **BIOS** is an older firmware used to start a computer. The BIOS uses the **MBR** to manage the partition table of a hard drive. It has a text interface and is slower. It is still present on many systems today, but it is limited by its age and capabilities.
+-   **UEFI** is a modern firmware that replaces the BIOS. UEFI uses the **GPT** (GUID Partition Table) to manage the partitions of a disk. UEFI allows for a graphical interface and a faster startup, and includes advanced security features like **Secure Boot**. UEFI is compatible with modern systems such as those based on **ARM processors**, **MacBooks with M1 processors**, and **64-bit** architectures.
 
-**Les Macbook M1** et suivants prennent en charge uniquement le UEFI contrairement aux PC Windows modernes qui sont compatibles avec BIOS et UEFI. 
+**M1 Macbooks** and later only support UEFI, unlike modern Windows PCs which are compatible with both BIOS and UEFI.
 
-Lorsque vous créez une machine virtuelle (VM) sur un MacBook M1, même pour une distribution Linux comme **Debian ARM64**, il est nécessaire de cocher l'option **"Enable EFI"** (activer l'EFI) dans les paramètres de la VM. Cela permet de simuler le démarrage d'un système compatible **UEFI**, ce qui est indispensable pour que la VM fonctionne correctement sur l'architecture ARM du MacBook M1.
+When you create a virtual machine (VM) on an M1 MacBook, even for a Linux distribution like **Debian ARM64**, it is necessary to check the **"Enable EFI"** option in the VM settings. This allows simulating the startup of a **UEFI** compatible system, which is essential for the VM to function correctly on the ARM architecture of the M1 MacBook.
 
-Sans l'option **"Enable EFI"**, vous pourriez rencontrer des problèmes de démarrage, car la configuration **BIOS** (le mode de démarrage traditionnel) n'est pas compatible avec l'architecture du MacBook M1.
+Without the **"Enable EFI"** option, you might encounter startup problems, as the **BIOS** configuration (the traditional startup mode) is not compatible with the M1 MacBook's architecture.
 
-## Le partitionnement
+## Partitioning
 
-Le **partitionnement** consiste à diviser un disque dur ou un SSD en plusieurs **partitions** distinctes, chacune agissant comme un disque virtuel. Cela permet d’organiser les données, d'installer plusieurs systèmes d'exploitation ou de mieux gérer l’espace de stockage en séparant les fichiers système, les données personnelles et les sauvegardes, par exemple. Chaque partition peut être formatée avec un système de fichiers différent et avoir sa propre table de partition (comme MBR ou GPT).
+**Partitioning** consists of dividing a hard drive or SSD into several distinct **partitions**, each acting as a virtual disk. This allows for organizing data, installing multiple operating systems, or better managing storage space by separating system files, personal data, and backups, for example. Each partition can be formatted with a different file system and have its own partition table (like MBR or GPT).
 
-**Une table de partition** est une structure de données utilisée pour définir et organiser les partitions d'un disque dur ou d'un SSD. Elle contient des informations sur la manière dont un disque est divisé en sections appelées **partitions**, et chaque partition peut être utilisée pour un système de fichiers ou un autre type de stockage. Il existe principalement deux types de **tables de partitionnement** utilisées dans les systèmes informatiques :
+**A partition table** is a data structure used to define and organize the partitions of a hard drive or SSD. It contains information on how a disk is divided into sections called **partitions**, and each partition can be used for a file system or another type of storage. There are mainly two types of **partitioning tables** used in computer systems:
 
-- **MBR (Master Boot Record)** est un **ancien format** utilisé depuis les années 1980. Il est limité à **4 partitions primaires** (ou 3 primaires + 1 étendue). Il Supporte des **disques jusqu'à 2 To maximum.** Il est utilisé principalement avec le **BIOS** pour démarrer le système. MBR est principalement associé au BIOS pour des raisons historiques (bien qu’il puisse parfois être utilisé avec UEFI).
-- **GPT (GUID Partition Table)** est un **format moderne** qui remplace le MBR. Il supporte **un nombre illimité de partitions** (généralement jusqu'à 128). Il prend en charge des **disques de plus de 2 To.** Il est utilisé avec **UEFI**, offrant des fonctionnalités avancées comme le **Secure Boot.** Il est plus fiable et sécurisé, notamment avec des **contrôles de redondance**.
+-   **MBR (Master Boot Record)** is an **old format** used since the 1980s. It is limited to **4 primary partitions** (or 3 primary + 1 extended). It supports **disks up to 2 TB maximum.** It is used mainly with the **BIOS** to start the system. MBR is primarily associated with BIOS for historical reasons (although it can sometimes be used with UEFI).
+-   **GPT (GUID Partition Table)** is a **modern format** that replaces MBR. It supports **an unlimited number of partitions** (usually up to 128). It supports **disks larger than 2 TB.** It is used with **UEFI**, offering advanced features like **Secure Boot.** It is more reliable and secure, especially with **redundancy checks**.
 
-### Partition, Chiffrement et Partition logique:
+### Partition, Encryption and Logical Partition:
 
-**Une partition** est une division logique d'un disque dur ou d'un SSD en plusieurs **segments**. Chaque partition peut être traitée comme un disque séparé, avec son propre système de fichiers (comme NTFS, ext4, etc.).
+**A partition** is a logical division of a hard drive or SSD into several **segments**. Each partition can be treated as a separate disk, with its own file system (like NTFS, ext4, etc.).
 
-**Le chiffrement** est une méthode de sécurisation des données en les transformant en une forme illisible sans une **clé de déchiffrement**. Le chiffrement peut être appliqué à une partition, un disque entier, ou même à des fichiers individuels.
+**Encryption** is a method of securing data by transforming it into an unreadable form without a **decryption key**. Encryption can be applied to a partition, an entire disk, or even individual files.
 
-**Une partition logique** est une **partition interne** à une **partition étendue**. Dans le système de partitionnement **MBR**, une partition étendue est utilisée pour contourner la limitation de quatre partitions primaires. À l'intérieur de cette partition étendue, on peut créer plusieurs **partitions logiques**. Avec une table de partitionnement GPT, les partitions logiques sont inutiles puisqu’il n’y a pas de limite au nombre de partitions.
+**A logical partition** is a **partition internal** to an **extended partition**. In the **MBR** partitioning system, an extended partition is used to bypass the limitation of four primary partitions. Inside this extended partition, one can create several **logical partitions**. With a GPT partition table, logical partitions are useless since there is no limit to the number of partitions.
 
 ### LVM
 
-**LVM (Logical Volume Manager)** est un outil utilisé principalement sous Linux pour gérer les disques et les volumes de manière plus flexible que les méthodes de partitionnement traditionnelles.
+**LVM (Logical Volume Manager)** is a tool used mainly under Linux to manage disks and volumes more flexibly than traditional partitioning methods.
 
-**Volumes logiques:** LVM permet de gérer des **volumes logiques** (à ne pas confondre avec les partitions logiques) qui sont des abstractions des disques physiques. LVM fonctionne au-dessus des **disques physiques** (ou des partitions physiques) et permet de créer des volumes plus flexibles, appelés **volumes logiques**, qui peuvent être redimensionnés et ajustés dynamiquement: Avec LVM, vous pouvez facilement **ajuster la taille** des volumes logiques, ajouter de nouveaux disques, ou en retirer sans perturber les données ou redémarrer le système. Un volume logique peut combiner plusieurs disque physiques ou partitions.
+**Logical volumes:** LVM allows managing **logical volumes** (not to be confused with logical partitions) which are abstractions of physical disks. LVM works on top of **physical disks** (or physical partitions) and allows creating more flexible volumes, called **logical volumes**, which can be resized and adjusted dynamically: With LVM, you can easily **adjust the size** of logical volumes, add new disks, or remove them without disrupting data or restarting the system. A logical volume can combine several physical disks or partitions.
 
-**Snapshots:** LVM permet aussi de créer des **snapshots**, c'est-à-dire des copies exactes de l'état d'un volume à un instant donné. Cela peut être très utile pour des sauvegardes ou des tests, car les snapshots permettent de revenir à un état précédent du volume.
+**Snapshots:** LVM also allows creating **snapshots**, which are exact copies of the state of a volume at a given moment. This can be very useful for backups or tests, as snapshots allow you to return to a previous state of the volume.
 
-### Les systèmes de fichier (*file* *system*)
+### File systems
 
-Lorsque vous partitionnez un disque, vous devez choisir un **système de fichiers** pour chaque partition. Le système de fichiers détermine comment les données sont organisées, stockées et récupérées sur cette partition. Voici les principaux types de systèmes de fichiers :
+When you partition a disk, you must choose a **file system** for each partition. The file system determines how data is organized, stored, and retrieved on that partition. Here are the main types of file systems:
 
-- **FAT 32 (File Allocation Table 32):** Compatible avec presque tous les OS. Limitation : Taille maximale des fichiers = 4 Go, taille maximale de partition = 8 To. Usage courant : Clés USB, disques externes pour compatibilité multiplateforme.
-- **NTFS (New Technology File System):** Utilisé par défaut sur Windows. Supporte de grands fichiers (> 4 Go) et des fonctionnalités avancées comme le chiffrement et les autorisations. **Usage courant** : Partitions pour Windows ou disques internes.
-- **HFS+ / APFS (Apple File Systems):** Utilisés par macOS (APFS est plus récent, optimisé pour SSD). Non compatible nativement avec Windows. **Usage courant** : Partitions pour macOS.
-- **ext4 (Fourth Extended File System):** Système de fichiers par défaut pour Linux. Fiable, rapide, et supporte de grands fichiers. **Usage courant** : Partitions pour les systèmes Linux.
-- **Swap (Linux Swap Partition):** Utilisé par Linux pour étendre la mémoire vive (RAM) lorsqu'elle est insuffisante. Pas utilisé pour stocker des fichiers normaux. **Usage courant** : Partitions réservées au swap sous Linux.
+-   **FAT32 (File Allocation Table 32):** Compatible with almost all OSes. Limitation: Maximum file size = 4 GB, maximum partition size = 8 TB. Common use: USB keys, external disks for cross-platform compatibility.
+-   **NTFS (New Technology File System):** Used by default on Windows. Supports large files (> 4 GB) and advanced features like encryption and permissions. **Common use**: Partitions for Windows or internal disks.
+-   **HFS+ / APFS (Apple File Systems):** Used by macOS (APFS is newer, optimized for SSDs). Not natively compatible with Windows. **Common use**: Partitions for macOS.
+-   **ext4 (Fourth Extended File System):** Default file system for Linux. Reliable, fast, and supports large files. **Common use**: Partitions for Linux systems.
+-   **Swap (Linux Swap Partition):** Used by Linux to extend the main memory (RAM) when it is insufficient. Not used to store normal files. **Common use**: Partitions reserved for swap under Linux.
 
-Seuls les deux derniers types de système de fichiers (ceux pour Linux) seront utilisés dans le cadre du projet (en réalité le FAT 32 sera aussi utilisé par la partition EFS mais le type de système de fichier pour la partition EFS sera appliqué sans intervention de votre part).
+Only the last two types of file systems (those for Linux) will be used in the project (in reality FAT32 will also be used by the EFS partition but the file system type for the EFS partition will be applied without your intervention).
 
-## Création de la machine virtuelle
+## Creating the virtual machine
 
-**Pour créer un nouvelle machine virtuelle** (*Virtual* *Machine* abrégé *VM*), il suffit de cliquer sur le bouton “Nouvelle”. Vous aurez alors accès à 4 onglets.
+**To create a new virtual machine** (*Virtual Machine* abbreviated *VM*), just click on the "New" button. You will then have access to 4 tabs.
 
-- **Name and operating system:** Ici vous devez nommer votre VM (obligatoire), puis vous pouvez changer le répertoire où elle sera enregistrée (*folder*) et enfin vous devez sélectionner l’image ISO (*ISO* *Image*) de Debian que vous avez téléchargé précédemment. Les champs “Type”, “Subtype” et “Version” seront alors remplis automatiquement. **Vous devez par contre cocher la case “Skip Unattended Installation”** afin d’empêcher l’installation automatisée.
-- **Unattended Install:** Cet onglet sera grisé et inaccessible si vous avez bien coché la case idoine.
-- **Hardware:** Vous devez sélectionner ici la mémoire vive (*RAM*) que vous voulez allouer à votre VM (attention cela réduira la RAM disponible pour la machine hôte); 1024 MB semble  suffisant pour le projet. Ensuite le nombre de coeurs CPU (*processors*) que vous voulez allouer à votre VM (ça marche très bien avec un seul). Enfin sur Macbook vous devez ensuite cocher la case “Enable EFI” pour les raisons vues plus haut.
-- **Hard Disk:** Sélectionnez “Create a Virtual Hard Disk Now”; vous pouvez ensuite changer le répertoire de destination, puis vous devez choisir la taille du “disque dur” que vous souhaitez créer (15 Go semble largement suffisant, mais si vous voulez avoir des tailles de partitions semblables à celle montrées dans le sujet, prenez 30Go). Enfin vous devez sélectionner VDI (*Virtualbox Disk Image*) comme type de fichier pour disque dur virtuel (*Hard Disk File Type And Variant*). Ne cochez pas l’option “preallocate full size” afin d’avoir une allocation dynamique de la mémoire.
+-   **Name and operating system:** Here you must name your VM (mandatory), then you can change the directory where it will be saved (*folder*) and finally you must select the ISO image (*ISO Image*) of Debian that you downloaded previously. The "Type", "Subtype" and "Version" fields will then be filled automatically. **However, you must check the "Skip Unattended Installation" box** to prevent automated installation.
+-   **Unattended Install:** This tab will be grayed out and inaccessible if you have checked the appropriate box.
+-   **Hardware:** You must select here the main memory (*RAM*) that you want to allocate to your VM (be careful this will reduce the RAM available for the host machine); 1024 MB seems sufficient for the project. Then the number of CPU cores (*processors*) that you want to allocate to your VM (it works very well with just one). Finally on Macbook you must then check the "Enable EFI" box for the reasons seen above.
+-   **Hard Disk:** Select "Create a Virtual Hard Disk Now"; you can then change the destination directory, then you must choose the size of the "hard disk" you want to create (15 GB seems largely sufficient, but if you want to have partition sizes similar to those shown in the subject, take 30GB). Finally you must select VDI (*Virtualbox Disk Image*) as the file type for the virtual hard disk (*Hard Disk File Type And Variant*). Do not check the "preallocate full size" option in order to have dynamic memory allocation.
 
-**VDI:** Dans VirtualBox, lors de la création ou de l'ajout d'un disque virtuel à une machine virtuelle (VM), vous devez choisir un **type de fichier de disque dur virtuel**. Ces fichiers représentent l'image du disque dur pour la VM, ils émulent un disque dur physique pour une VM. VDI est le format natif de Virtualbox.
+**VDI:** In VirtualBox, when creating or adding a virtual disk to a virtual machine (VM), you must choose a **virtual hard disk file type**. These files represent the hard disk image for the VM, they emulate a physical hard disk for a VM. VDI is the native format of Virtualbox.
 
-**Allocation dynamique:** Sans l’option “pre allocate full size”, le fichier disque virtuel ne grandit que lorsque la VM y écrit des données. La partition interne dans la VM fonctionne de la même manière, mais moins d'espace est immédiatement consommé sur l'hôte. Avec l'option cochée, l'espace total est alloué tout de suite, mais cela ne change rien à la gestion des partitions à l'intérieur de la VM (cela signifie qu'un fichier disque virtuel de par exemple 30 Go sera immédiatement créé sur le disque dur de votre **ordinateur hôte**).
+**Dynamic allocation:** Without the "pre-allocate full size" option, the virtual disk file only grows when the VM writes data to it. The internal partition in the VM works the same way, but less space is immediately consumed on the host. With the option checked, the total space is allocated right away, but this does not change anything in the management of partitions inside the VM (this means that a virtual disk file of for example 30 GB will be immediately created on the hard drive of your **host computer**).
 
-Vous pouvez ensuite cliquer sur “suivant” pour valider la création de la VM.
+You can then click "next" to validate the creation of the VM.
 
-## Installation de Debian
+## Installing Debian
 
-**Pour lancer l’installation de Debian** sélectionnez votre VM dans Virtualbox et cliquez sur “démarrer”. Au lancement, dans le menu “view” de Virtualbox, sélectionnez “scale mode” puis cliquez sur “switch” afin de régler la fenêtre de l’affichage.
+**To start the Debian installation** select your VM in Virtualbox and click "start". On launch, in the "view" menu of Virtualbox, select "scale mode" then click "switch" to adjust the display window.
 
-Dans la VM, sélectionner ensuite “installation” pour commencer l’installation de Debian.
+In the VM, then select "installation" to begin the installation of Debian.
 
-Sélectionnez la langue, le fuseau horaire, puis la disposition du clavier (”français” pour tout dans mon cas).
+Select the language, the time zone, then the keyboard layout ("French" for everything in my case).
 
-**Nom de la machine:** Entrez le nom souhaité, c’est le *hostname* dont parle le sujet (votre identifiant suivi de “42”).
+**Machine name:** Enter the desired name, this is the *hostname* mentioned in the subject (your login followed by "42").
 
-**Domaine:** Vous pouvez laisser ce champ vierge.
+**Domain:** You can leave this field blank.
 
-**Qu’est-ce qu’un "domaine" ?**
+**What is a "domain"?**
 
-Un domaine est une partie de l'adresse réseau d'un ordinateur, généralement utilisée dans les environnements où plusieurs machines communiquent (comme des réseaux locaux ou internet). Par exemple : **Nom d’hôte (*hostame*)**: `monserveur` **Nom de domaine**: `exemple.com`**Nom complet (FQDN)**: `monserveur.exemple.com`
+A domain is part of a computer's network address, usually used in environments where multiple machines communicate (like local networks or the internet). For example: **Hostname**: `myserver` **Domain name**: `example.com` **Full name (FQDN)**: `myserver.example.com`
 
-**Quand est-ce utile ?**
+**When is it useful?**
 
-- **Réseaux locaux ou d'entreprise** : Si votre système fait partie d'un réseau plus grand (comme un réseau d’entreprise), le domaine aide à localiser votre machine. Par exemple, dans une entreprise, votre PC pourrait être : `pc-123.bureau.local`.
-- **Serveurs accessibles publiquement** : Si vous voulez que votre serveur soit identifiable sur internet avec un nom de domaine comme `www.monsite.com`.
+-   **Local or corporate networks**: If your system is part of a larger network (like a corporate network), the domain helps to locate your machine. For example, in a company, your PC could be: `pc-123.office.local`.
+-   **Publicly accessible servers**: If you want your server to be identifiable on the internet with a domain name like `www.mysite.com`.
 
- Si vous ne spécifiez pas de domaine, Debian utilisera simplement le **nom de l’hôte** pour identifier la machine. Cela fonctionne parfaitement pour un usage domestique ou hors réseau.
+ If you do not specify a domain, Debian will simply use the **hostname** to identify the machine. This works perfectly for home or off-network use.
 
-Choisissez ensuite un mot de passe pour le superutilisateur “root”.
+Then choose a password for the "root" superuser.
 
-### **C’est quoi le superutilisateur root?**
+### **What is the root superuser?**
 
-Le **superutilisateur `root`** est le compte avec les privilèges les plus élevés sur un système d'exploitation basé sur Linux ou Unix (comme Debian). Il dispose d'un accès total au système, ce qui lui permet de lire, écrire, exécuter et modifier tous les fichiers, y compris ceux protégés. Ce compte est utilisé pour administrer et gérer le système, installer des logiciels, configurer les périphériques et modifier les paramètres système. Le compte root est généralement désigné par l'ID utilisateur (UID) 0, qui est unique et réservé pour ce rôle.
+The **`root` superuser** is the account with the highest privileges on a Linux or Unix-based operating system (like Debian). It has total access to the system, which allows it to read, write, execute, and modify all files, including protected ones. This account is used to administer and manage the system, install software, configure devices, and modify system settings. The root account is usually designated by the user ID (UID) 0, which is unique and reserved for this role.
 
-Le superutilisateur est responsable de la gestion des utilisateurs, notamment la création, modification ou suppression de comptes. Il s'occupe aussi de la maintenance du système, comme la réparation ou la reconfiguration en cas de problème. L'installation ou la mise à jour de logiciels, ainsi que la modification de fichiers systèmes critiques, fait aussi partie de ses tâches. Enfin, il gère la sauvegarde et la restauration des données ou des partitions.
+The superuser is responsible for user management, including creating, modifying, or deleting accounts. It also handles system maintenance, such as repairing or reconfiguring in case of a problem. Installing or updating software, as well as modifying critical system files, is also part of its tasks. Finally, it manages the backup and restoration of data or partitions.
 
-Lorsqu'on est connecté en tant qu'utilisateur standard, il est possible de se connecter en tant que root en utilisant la commande `su root` suivie du mot de passe du superutilisateur.
+When logged in as a standard user, it is possible to log in as root using the `su root` command followed by the superuser's password.
 
-**Nouvel utilisateur:** Vous devez ensuite choisir un nom complet pour la création du premier utilisateur comme défini dans le sujet (votre login de l’intra42), puis un identifiant pour cette utilisateur (vous pouvez laisser la même chose) et enfin choisir un mot de passe.
+**New user:** You must then choose a full name for the creation of the first user as defined in the subject (your intra42 login), then an identifier for this user (you can leave the same thing) and finally choose a password.
 
 ### Partition
 
-Sélectionner le mode de partition “manuel” pour éviter que l’installateur ne crée automatiquement les partitions. Sélectionnez ensuite le disque sur lequel faire les partitions (VBOX HARDISK) pour créer une nouvelle table des partitions. Une ligne affichant l’espace libre sur le disque va alors apparaître. Il faut cliquer sur cette ligne pour créer la première partition. 
+Select the "manual" partition mode to prevent the installer from automatically creating the partitions. Then select the disk on which to make the partitions (VBOX HARDISK) to create a new partition table. A line showing the free space on the disk will then appear. You must click on this line to create the first partition.
 
-**Partition système EFI:** Créez une première partition (taille 512 MB suffisante), placez-la au début et  dans “utiliser comme” sélectionnez “Partition système EFI”. Cette partition n’apparaît pas dans les exemples donnés dans le sujet, mais elle est nécessaire puisqu’on utilise le mode UEFI pour démarrer le système d’exploitation. Il suffit ensuite de cliquer sur “fin du paramétrage de cette partition”.
+**EFI system partition:** Create a first partition (512 MB size sufficient), place it at the beginning and in "use as" select "EFI System Partition". This partition does not appear in the examples given in the subject, but it is necessary since we are using UEFI mode to boot the operating system. Then just click on "done setting up the partition".
 
-### **Pourquoi j’ai une partition EFI en plus par rapport au sujet?**
+### **Why do I have an extra EFI partition compared to the subject?**
 
-Si vous avez bien suivi jusque là, vous aurez compris que les spécificité du Macbook et sa non-prise en charge du BIOS (ainsi peut-être que l’image ISO ARM64 de Debian) vous obligent à utiliser UEFI qui ne peut pas fonctionner sans cette partition EFI.
+If you have followed so far, you will have understood that the specifics of the Macbook and its non-support of BIOS (as well as perhaps the ARM64 ISO image of Debian) force you to use UEFI which cannot function without this EFI partition.
 
-**Partition /boot:** Créez une seconde partition (taille 512 MB suffisante), dans “utiliser comme” sélectionnez “système de fichiers journalisés ext4” (puisque c’est le système de fichiers par défaut pour Linux), puis dans “point de montage” sélectionnez “/boot”, puis “fin du paramétrage de cette partition”.
+**/boot partition:** Create a second partition (512 MB size sufficient), in "use as" select "ext4 journaling file system" (since it is the default file system for Linux), then in "mount point" select "/boot", then "done setting up the partition".
 
-### **Pourquoi j’ai des espaces libres de 1 MB ou similaires qui se créent ?**
+### **Why are free spaces of 1 MB or similar being created?**
 
-Les espaces libres de **1 MB** (ou similaires) qui apparaissent lors de la création ou de la modification de partitions ne sont pas des erreurs. Ils sont intentionnels et remplissent des fonctions importantes liées à la compatibilité, l’alignement et l’efficacité.
+The free spaces of **1 MB** (or similar) that appear when creating or modifying partitions are not errors. They are intentional and serve important functions related to compatibility, alignment, and efficiency.
 
-Tout d'abord, ces espaces permettent d’aligner les partitions sur les blocs physiques des disques modernes, comme les SSD, qui utilisent des blocs de 4 KB ou plus. Cet alignement optimise les performances de lecture et d’écriture. Ensuite, dans le cadre de la table de partitionnement GPT, des espaces libres sont réservés au début et à la fin du disque pour stocker des métadonnées critiques et réduire les risques de conflits avec certains outils.
+First, these spaces allow partitions to be aligned with the physical blocks of modern disks, such as SSDs, which use blocks of 4 KB or more. This alignment optimizes read and write performance. Second, in the context of the GPT partition table, free spaces are reserved at the beginning and end of the disk to store critical metadata and reduce the risk of conflicts with certain tools.
 
-Ils servent également à assurer la compatibilité entre les systèmes BIOS et UEFI, en réservant un espace pour les en-têtes nécessaires à l’amorçage ou pour une partition bootable potentielle. Par ailleurs, les gestionnaires de partitions, comme GParted ou ceux intégrés à Windows et Linux, laissent parfois ces espaces libres pour anticiper des modifications futures, comme l’expansion ou la fusion de partitions. Enfin, certains systèmes de fichiers ou configurations spécifiques, comme LVM ou RAID, nécessitent ces marges pour leur bon fonctionnement.
+They also serve to ensure compatibility between BIOS and UEFI systems, by reserving space for the headers necessary for booting or for a potential bootable partition. In addition, partition managers, such as GParted or those integrated into Windows and Linux, sometimes leave these free spaces to anticipate future modifications, such as expanding or merging partitions. Finally, some file systems or specific configurations, such as LVM or RAID, require these margins for their proper functioning.
 
-**Configurer les volumes chiffrés:** Avant de créer les volumes logiques, il faut effectuer le chiffrement comme demandé dans le sujet. Pour cela il faut aller dans “Configurer les volumes chiffrés”, sélectionner l’espace libre restant sur le disque puis “fin du paramétrage de cette partition”, puis “terminer” et choisir une phrase de passe.
+**Configure encrypted volumes:** Before creating the logical volumes, you must perform the encryption as requested in the subject. To do this, you must go to "Configure encrypted volumes", select the remaining free space on the disk then "done setting up the partition", then "finish" and choose a passphrase.
 
-Un **volume chiffré** est une unité de stockage (comme une partition, un disque entier ou un fichier qui agit comme un disque virtuel) dont le contenu est protégé par un algorithme de **chiffrement**. Cela signifie que les données stockées dans ce volume ne peuvent être lues ou utilisées qu'avec une **clé de déchiffrement**, comme un mot de passe, une clé cryptographique, ou un fichier clé. Le **chiffrement AES** (Advanced Encryption Standard) est un algorithme de cryptographie symétrique utilisé pour sécuriser les données. C'est l'un des algorithmes de chiffrement les plus couramment utilisés aujourd'hui, car il est rapide, sûr et standardisé.
+An **encrypted volume** is a storage unit (like a partition, an entire disk, or a file that acts as a virtual disk) whose content is protected by an **encryption** algorithm. This means that the data stored in this volume can only be read or used with a **decryption key**, such as a password, a cryptographic key, or a key file. **AES encryption** (Advanced Encryption Standard) is a symmetric cryptography algorithm used to secure data. It is one of the most commonly used encryption algorithms today, as it is fast, secure, and standardized.
 
-**Configurer le gestionnaire des volumes logiques:** Cliquer ensuite sur “Configurer le gestionnaire des volumes logiques”, puis “Créer un groupe de volume” (nommez-le “LVMGroup si vous voulez le nommer comme dans le sujet) et sélectionnez le volume crypté précédemment (qui doit s’appeler “sda3_crypt”). A l’intérieur de ce ce groupe, nous allons ensuite créer plusieurs volumes logiques.
+**Configure the logical volume manager:** Then click on "Configure the logical volume manager", then "Create a volume group" (name it "LVMGroup if you want to name it as in the subject) and select the previously encrypted volume (which should be called "sda3_crypt"). Inside this group, we will then create several logical volumes.
 
-**Pourquoi sur le sujet les partitions SDA3 et SDA4 n’existent pas alors qu’il y a SDA5?**
+**Why on the subject do partitions SDA3 and SDA4 not exist when there is SDA5?**
 
-**Sous un système utilisant le partitionnement MBR (Master Boot Record)**, qui est souvent associé au BIOS, les partitions primaires sont limitées à **quatre** par disque. **SDA1 à SDA4** (ou leurs équivalents sur d'autres disques) sont réservées pour les **partitions primaires**. Ce sont les premières partitions créées sur le disque. Les partitions logiques sont numérotées à partir de **SDA5** et au-delà.
+**Under a system using MBR (Master Boot Record) partitioning**, which is often associated with BIOS, primary partitions are limited to **four** per disk. **SDA1 to SDA4** (or their equivalents on other disks) are reserved for **primary partitions**. These are the first partitions created on the disk. Logical partitions are numbered from **SDA5** onwards.
 
-Avec **GPT (GUID Partition Table)**, il n'y a **plus de limitation stricte** sur les partitions primaires, contrairement à MBR. Toutes les partitions créées sur un disque GPT sont équivalentes. Il n'y a pas de notion de "partition primaire" ou "partition logique". Les partitions sur un disque GPT sont numérotées comme suit : **sda1, sda2, sda3**, etc., pour chaque partition créée. Il n'y a pas de limitation à **sda1-sda4** comme avec MBR.
+With **GPT (GUID Partition Table)**, there is **no longer a strict limitation** on primary partitions, unlike MBR. All partitions created on a GPT disk are equivalent. There is no concept of "primary partition" or "logical partition". Partitions on a GPT disk are numbered as follows: **sda1, sda2, sda3**, etc., for each partition created. There is no limitation to **sda1-sda4** as with MBR.
 
-**Créer les volumes logique** comme sur le sujet en cliquant sur “Créer un volume logique”, sélectionnez le groupe de volume “LVMGroup” précédemment créé, nommez le premier volume ainsi créé “root”, choisissez sa taille (par exemple 10G comme dans le sujet). Répétez l’opération pour les volumes logiques “swap”, “home, “var”, “srv”, “tmp”, “var-log” pour avoir les mêmes que la partie bonus du sujet. Cliquez sur “terminer” pour revenir à la table des partitions.
+**Create the logical volumes** as on the subject by clicking on "Create a logical volume", select the "LVMGroup" volume group previously created, name the first volume thus created "root", choose its size (for example 10G as in the subject). Repeat the operation for the logical volumes "swap", "home, "var", "srv", "tmp", "var-log" to have the same ones as the bonus part of the subject. Click "finish" to return to the partition table.
 
-**Affecter les différents volumes:** Cliquez ensuite sur la ligne du premier volume (la ligne où apparait sa taille en MB ou GB) qui doit être le “home” (si vous les avez créé dans le même ordre que moi) et dans “utiliser comme” sélectionnez “système de fichiers journalisés ext4”, puis dans “point de montage” sélectionnez “home”, puis “fin du paramétrage de cette partition”.
+**Assign the different volumes:** Then click on the line of the first volume (the line where its size appears in MB or GB) which should be "home" (if you created them in the same order as me) and in "use as" select "ext4 journaling file system", then in "mount point" select "home", then "done setting up the partition".
 
-Répétez l’opération pour chacun des volumes du groupe (”var” doit être monté sur “var”, “root” sur “/”, “srv”, sur “srv” etc) avec deux exceptions:
+Repeat the operation for each of the volumes in the group ("var" should be mounted on "var", "root" on "/", "srv", on "srv" etc) with two exceptions:
 
-- Le volume swap: dans “utiliser comme” il faut choisir “espace d’échange (”swap”)” et vous n’aurez donc pas à choisir de point de montage.
-- Le volume var-log: Après avoir choisi sont système de fichiers, il faut lui sélectionner le point de montage “autre choix” et saisir manuellement “/var/log”.
+-   The swap volume: in "use as" you must choose "swap space" and you will therefore not have to choose a mount point.
+-   The var-log volume: After choosing its file system, you must select the mount point "other choice" and manually enter "/var/log".
 
-Une fois l’opération terminée, cliquez sur “Terminer les partitionements et appliquer les changements” et acceptez. Puis pour “Analyser les systèmes d’information” faites “non”
+Once the operation is complete, click on "Finish partitioning and write changes to disk" and accept. Then for "Scan for other operating systems" choose "no".
 
-### **C’est quoi un point de montage?**
+### **What is a mount point?**
 
-Un **point de montage** est un répertoire dans un système de fichiers où un périphérique de stockage (comme un disque dur, une clé USB, ou une partition) est "connecté" pour être accessible et utilisable par le système d'exploitation. Une fois qu'un périphérique est monté, ses fichiers peuvent être consultés comme s'ils faisaient partie du système de fichiers principal. Lorsqu'un périphérique est monté, son contenu devient accessible à un emplacement précis dans l'arborescence des fichiers du système (exemple : `/home`).
+A **mount point** is a directory in a file system where a storage device (like a hard drive, a USB key, or a partition) is "connected" to be accessible and usable by the operating system. Once a device is mounted, its files can be accessed as if they were part of the main file system. When a device is mounted, its content becomes accessible at a specific location in the system's file tree (example: `/home`).
 
-### Configurer l’outil de gestion des paquets
+### Configure the package management tool
 
-Un **outil de gestion des paquets** est un logiciel ou un ensemble de programmes utilisé pour installer, mettre à jour, configurer, et gérer les logiciels sur un système d'exploitation. Il facilite le processus de gestion des dépendances et de mise à jour des applications.
+A **package management tool** is a software or a set of programs used to install, update, configure, and manage software on an operating system. It facilitates the process of managing dependencies and updating applications.
 
-Choisissez le pays du miroir proche de vous (”France” pour moi), puis sélectionnez un miroir (le premier *deb.debian.org* est très bien) et vous pouvez laisser “Mandataire http” vide.
+Choose the country of the mirror near you ("France" for me), then select a mirror (the first *deb.debian.org* is very good) and you can leave "HTTP proxy" blank.
 
-Pour “popularity contest” à vous de voir si vous voulez participer à l’étude ou non.
+For "popularity contest" it's up to you to see if you want to participate in the study or not.
 
-Dans “sélection des logiciels” décochez tout afin de n’avoir aucun environnement de bureau et de n’installer aucun utilitaire supplémentaire (les utilitaires nécessaires seront installés par la suite manuellement).
+In "software selection" uncheck everything in order to have no desktop environment and to install no additional utilities (the necessary utilities will be installed later manually).
 
-Enfin acceptez l’installation de GRUB.
+Finally accept the installation of GRUB.
 
-**GRUB** (GNU GRand Unified Bootloader) est un chargeur de démarrage utilisé pour lancer un système d'exploitation lors du démarrage de l'ordinateur. Il permet de gérer plusieurs systèmes d'exploitation, d'offrir un menu interactif pour choisir quoi démarrer, et de passer des paramètres au noyau. Compatible avec MBR et GPT, GRUB supporte de nombreux systèmes de fichiers et offre des outils de dépannage en cas de problème. Il est très personnalisable et constitue une pièce essentielle des systèmes Linux et UNIX.
+**GRUB** (GNU GRand Unified Bootloader) is a boot loader used to launch an operating system when the computer starts. It allows managing multiple operating systems, offering an interactive menu to choose what to boot, and passing parameters to the kernel. Compatible with MBR and GPT, GRUB supports many file systems and offers troubleshooting tools in case of problems. It is highly customizable and is an essential part of Linux and UNIX systems.
 
-# Configurer Debian
+# Configure Debian
 
-Dans cette seconde partie, je vais vous exposer les outils et commandes à connaître pour réaliser la configuration de Debian telle que demandée dans le sujet (hors bonus).
+In this second part, I will present the tools and commands to know to carry out the configuration of Debian as requested in the subject (excluding bonus).
 
-## Configurer sudo
+## Configure sudo
 
-**Sudo (superuser do)** est une commande qui permet à un utilisateur d'exécuter des actions avec les privilèges d'un autre utilisateur, généralement **root**, sans se connecter directement en tant que ce dernier. Il assure un contrôle précis des permissions et améliore la sécurité en limitant l'accès administrateur. Pour configurer sudo, vous devez vous logger en tant que superutilisateur root.
+**Sudo (superuser do)** is a command that allows a user to execute actions with the privileges of another user, usually **root**, without logging in directly as that user. It ensures precise control of permissions and improves security by limiting administrator access. To configure sudo, you must log in as the root superuser.
 
-### Ajouter un utilisateur <username> au groupe sudo
+### Add a user <username> to the sudo group
 
-**`su root`**  permet de se logger en tant que root
+**`su root`** allows you to log in as root
 
-**`apt update`**  met à jour la liste des paquets disponibles dans les dépôts configurés sur le système, sans installer ni mettre à jour aucun paquet ****
+**`apt update`** updates the list of available packages in the repositories configured on the system, without installing or updating any packages
 
-**`apt upgrade`**  met à jour tous les paquets installés sur le système vers leurs dernières versions disponibles, en utilisant les informations de la liste mise à jour par `apt update`
+**`apt upgrade`** updates all installed packages on the system to their latest available versions, using the information from the list updated by `apt update`
 
-**`apt install sudo`**  Installe sudo
+**`apt install sudo`** Installs sudo
 
-**`sudo usermod -aG sudo <username>`**  ajoute l’utilisateur <username> au groupe sudo sans l’enlever de ses autres groupes
+**`sudo usermod -aG sudo <username>`** adds the user <username> to the sudo group without removing them from their other groups
 
-**`exit`**  permet de quitter un terminal ou de fermer une session shell (permet par exemple de fermer la session root)
+**`exit`** allows you to exit a terminal or close a shell session (for example, allows you to close the root session)
 
-**`groups <username>`**  affiche tous les groupes auxquels appartient l’utilisateur
+**`groups <username>`** displays all the groups to which the user belongs
 
-### Méthode alternative: modifier le fichier sudoers
+### Alternative method: modify the sudoers file
 
-Pour ajouter un utilisateur au groupe **`sudo`** via le fichier **`sudoers`**, ouvrez d'abord le fichier en utilisant la commande **`visudo`**, car cette commande permet de vérifier les erreurs de syntaxe. Tapez **`sudo visudo`** dans le terminal. Ensuite, ajoutez la ligne suivante à la fin du fichier pour accorder des privilèges **sudo** à l'utilisateur souhaité : **`<username> ALL=(ALL:ALL) ALL`**, en remplaçant **`<username>`** par le nom de l'utilisateur. Cette ligne permet à l'utilisateur d'exécuter n'importe quelle commande avec **sudo**. Enfin, sauvegardez et fermez le fichier. Avec **`visudo`**, la syntaxe sera automatiquement vérifiée pour éviter toute erreur. Cela donne à l'utilisateur les droits d'administrateur et lui permet d'utiliser **sudo** pour exécuter des commandes en tant que superutilisateur.
+To add a user to the **`sudo`** group via the **`sudoers`** file, first open the file using the **`visudo`** command, as this command checks for syntax errors. Type **`sudo visudo`** in the terminal. Then, add the following line at the end of the file to grant **sudo** privileges to the desired user: **`<username> ALL=(ALL:ALL) ALL`**, replacing **`<username>`** with the user's name. This line allows the user to execute any command with **sudo**. Finally, save and close the file. With **`visudo`**, the syntax will be automatically checked to avoid any errors. This gives the user administrator rights and allows them to use **sudo** to execute commands as a superuser.
 
-**La ligne `ALL=(ALL:ALL) ALL` dans le fichier `sudoers` permet à un utilisateur de:**
+**The line `ALL=(ALL:ALL) ALL` in the `sudoers` file allows a user to:**
 
-**`ALL`** (avant le signe égal) : Accéder à toutes les machines, ce qui signifie que cette règle s'applique à tous les hôtes.
+**`ALL`** (before the equals sign): Access all machines, which means this rule applies to all hosts.
 
-**`(ALL:ALL)`** : Exécuter des commandes en tant que n'importe quel utilisateur (le premier **`ALL`**) et en tant que n'importe quel groupe (le deuxième **`ALL`**).
+**`(ALL:ALL)`**: Execute commands as any user (the first **`ALL`**) and as any group (the second **`ALL`**).
 
-**`ALL`** (après le signe égal) : L'utilisateur peut exécuter toutes les commandes avec **sudo**.
+**`ALL`** (after the equals sign): The user can execute all commands with **sudo**.
 
-En résumé, cela donne à l'utilisateur tous les droits d'exécution avec **sudo** sur toutes les commandes, quel que soit l'utilisateur ou le groupe.
+In summary, this gives the user full execution rights with **sudo** on all commands, regardless of the user or group.
 
-### Apt et aptitude
+### Apt and aptitude
 
-**`apt`** (Advanced Package Tool) est un système de gestion de paquets utilisé sur les distributions basées sur Debian (comme Ubuntu). Il permet d'installer, de mettre à jour, de supprimer et de gérer les logiciels sur un système Linux en utilisant des dépôts de logiciels. `apt` simplifie l'installation et la gestion des paquets, en résolvant automatiquement les dépendances nécessaires pour faire fonctionner un logiciel.
+**`apt`** (Advanced Package Tool) is a package management system used on Debian-based distributions (like Ubuntu). It allows you to install, update, remove, and manage software on a Linux system using software repositories. `apt` simplifies the installation and management of packages by automatically resolving the dependencies necessary for a software to work.
 
-**`apt`** est un outil moderne et simple pour gérer les paquets via la ligne de commande, principalement utilisé pour des tâches comme l'installation et la mise à jour de paquets. **`aptitude`**, quant à lui, offre une interface plus interactive et propose une gestion plus avancée des dépendances, souvent capable de résoudre des conflits de manière plus flexible. En général, **`apt`** est préféré pour sa simplicité, tandis que **`aptitude`** est utilisé pour des tâches plus complexes.
+**`apt`** is a modern and simple tool for managing packages via the command line, mainly used for tasks like installing and updating packages. **`aptitude`**, on the other hand, offers a more interactive interface and provides more advanced dependency management, often able to resolve conflicts more flexibly. In general, **`apt`** is preferred for its simplicity, while **`aptitude`** is used for more complex tasks.
 
-### Configurer le groupe sudo
+### Configure the sudo group
 
-Il faut pour cela éditer le fichier sudoers (ce fichier définit les permissions d'utilisation de `sudo` pour les utilisateurs et groupes) et y intégrer les paramètres que l’on souhaite. Le fichier `sudoers` se trouve généralement dans le répertoire `/etc/`  mais il vaut mieux l’ouvrir de manière sécurisée avec la commande suivante:
+For this, you need to edit the sudoers file (this file defines the permissions for using `sudo` for users and groups) and integrate the parameters you want. The `sudoers` file is usually located in the `/etc/` directory, but it is better to open it securely with the following command:
 
-**`sudo visudo`**  permet d'éditer le fichier `sudoers` de manière sécurisée: `visudo` vérifie la syntaxe avant de sauvegarder les modifications pour éviter les erreurs qui pourraient rendre le système inaccessible.
+**`sudo visudo`** allows you to edit the `sudoers` file securely: `visudo` checks the syntax before saving the changes to avoid errors that could make the system inaccessible.
 
-Les paramètres à écrire dans le fichier pour respecter le sujet sont:
+The parameters to write in the file to respect the subject are:
 
 ```bash
 Defaults     passwd_tries=3                    
-# Limite le nombre de tentatives de mot de passe à 3 avant d'échouer.
+# Limits the number of password attempts to 3 before failing.
 Defaults     badpass_message="Wrong password. Try again!" 
- # Message affiché après une tentative infructueuse de saisie du mot de passe.
+ # Message displayed after an unsuccessful password entry attempt.
 Defaults     logfile="/var/log/sudo/sudo.log"  
-# Spécifie l'emplacement du fichier journal où les commandes sudo sont enregistrées.
+# Specifies the location of the log file where sudo commands are recorded.
 Defaults     log_input                         
-# Active l'enregistrement des entrées (les commandes exécutées avec sudo).
+# Enables logging of inputs (commands executed with sudo).
 Defaults     log_output                        
-# Active l'enregistrement des sorties des commandes exécutées avec sudo.
+# Enables logging of outputs of commands executed with sudo.
 Defaults     requiretty                        
-# Exige que sudo soit exécuté dans un terminal pour une sécurité accrue (désactive les appels sans terminal).
+# Requires that sudo be executed in a terminal for increased security (disables calls without a terminal).
 ```
 
-## Configurer le pare-feu UFW
+## Configure the UFW firewall
 
-**UFW (Uncomplicated Firewall)** est un outil de gestion de pare-feu pour les systèmes Linux. Il simplifie la configuration des règles de filtrage réseau, permettant aux utilisateurs de définir facilement quelles connexions réseau sont autorisées ou bloquées sur un système. Il est conçu pour être facile à utiliser tout en étant puissant, et est souvent utilisé sur des distributions comme Ubuntu.
+**UFW (Uncomplicated Firewall)** is a firewall management tool for Linux systems. It simplifies the configuration of network filtering rules, allowing users to easily define which network connections are allowed or blocked on a system. It is designed to be easy to use while being powerful, and is often used on distributions like Ubuntu.
 
-### C’est quoi AppArmor?
+### What is AppArmor?
 
-AppArmor (**Application Armor**) est un module de sécurité pour Linux qui applique des politiques de contrôle d'accès obligatoires (MAC). Il limite les actions que les applications peuvent effectuer en définissant des profils qui spécifient les fichiers, réseaux et ressources auxquels elles peuvent accéder. Cela permet de réduire les risques liés à des comportements malveillants ou à des vulnérabilités.
+AppArmor (**Application Armor**) is a security module for Linux that applies mandatory access control (MAC) policies. It limits the actions that applications can perform by defining profiles that specify the files, networks, and resources they can access. This helps to reduce the risks associated with malicious behavior or vulnerabilities.
 
-### Quelle différence entre AppArmor et UFW?
+### What is the difference between AppArmor and UFW?
 
-Ce sont deux outils de sécurité distincts, mais ils complètent la protection globale d'un système Linux.
+These are two distinct security tools, but they complement the overall protection of a Linux system.
 
-- **UFW** se concentre sur la gestion des connexions réseau en configurant des règles de pare-feu pour autoriser ou bloquer le trafic entrant et sortant sur des ports spécifiques.
-- **AppArmor** protège les applications en restreignant les ressources système qu'elles peuvent utiliser, comme les fichiers, la mémoire, ou les périphériques.
+-   **UFW** focuses on managing network connections by configuring firewall rules to allow or block incoming and outgoing traffic on specific ports.
+-   **AppArmor** protects applications by restricting the system resources they can use, such as files, memory, or devices.
 
-Bien qu'il n'y ait pas de lien direct entre eux, ils peuvent être utilisés ensemble pour renforcer la sécurité. Par exemple, UFW contrôle l'accès réseau tandis qu'AppArmor restreint les comportements des applications exposées au réseau.
+Although there is no direct link between them, they can be used together to strengthen security. For example, UFW controls network access while AppArmor restricts the behavior of applications exposed to the network.
 
-**`sudo apt install ufw`**  installe ufw
+**`sudo apt install ufw`** installs ufw
 
-**`sudo ufw enable`**  active ufw
+**`sudo ufw enable`** enables ufw
 
-**`sudo ufw status`**  vérifie le statut pour s’assurer qu’il est activé
+**`sudo ufw status`** checks the status to ensure it is enabled
 
-**`sudo systemctl enable ufw`**  configure ufw pour qu’il se lance automatiquement au démarrage du système
+**`sudo systemctl enable ufw`** configures ufw to start automatically at system startup
 
-### C’est quoi systemctl?
+### What is systemctl?
 
-La commande `systemctl` est un outil de gestion du système et des services sous Linux. Elle permet de démarrer, arrêter, redémarrer, activer, désactiver, et vérifier le statut des services (ou unités) système. Elle est utilisée pour interagir avec le système d'initialisation **systemd**, qui gère les processus système et les services.
+The `systemctl` command is a system and service management tool under Linux. It allows you to start, stop, restart, enable, disable, and check the status of system services (or units). It is used to interact with the **systemd** initialization system, which manages system processes and services.
 
-Quelques exemples :
+Some examples:
 
-- `systemctl start <service>` : Démarre un service.
-- `systemctl stop <service>` : Arrête un service.
-- `systemctl status <service>` : Affiche l'état actuel d'un service.
-- `systemctl enable <service>` : Active un service pour qu'il se lance au démarrage.
-- `systemctl disable <service>` : Désactive le lancement automatique d'un service au démarrage.
+-   `systemctl start <service>`: Starts a service.
+-   `systemctl stop <service>`: Stops a service.
+-   `systemctl status <service>`: Displays the current status of a service.
+-   `systemctl enable <service>`: Enables a service to start at boot.
+-   `systemctl disable <service>`: Disables the automatic start of a service at boot.
 
-**`sudo ufw status verbose`**  permet d'afficher l'état actuel du pare-feu UFW avec des informations détaillées. Lorsqu'elle est exécutée, elle montre la liste des règles actives, les interfaces réseau concernées, et d'autres informations sur le statut du pare-feu. Le mot-clé "verbose" ajoute des détails supplémentaires, comme les ports ouverts, les actions par défaut (accepté, rejeté, etc.) et la configuration générale du pare-feu.
+**`sudo ufw status verbose`** displays the current status of the UFW firewall with detailed information. When executed, it shows the list of active rules, the network interfaces concerned, and other information about the firewall's status. The "verbose" keyword adds additional details, such as open ports, default actions (accepted, rejected, etc.) and the general configuration of the firewall.
 
-### C’est quoi un port?
+### What is a port?
 
-Un **port** en informatique fait référence à un **point de communication** dans un système qui permet à des programmes ou services d'échanger des données avec d'autres ordinateurs ou systèmes. Il est associé à un protocole réseau, comme TCP ou UDP, et identifie un service spécifique sur une machine. Les ports servent de points d'accès pour que des applications ou services puissent être accessibles via un réseau.
+A **port** in computing refers to a **communication point** in a system that allows programs or services to exchange data with other computers or systems. It is associated with a network protocol, such as TCP or UDP, and identifies a specific service on a machine. Ports serve as access points so that applications or services can be accessible via a network.
 
-Les ports sont identifiés par des numéros compris entre 0 et 65535. On les divise généralement en trois catégories :
+Ports are identified by numbers between 0 and 65535. They are generally divided into three categories:
 
-- **Ports bien connus** (0-1023) : Ces ports sont réservés pour des services standards, comme le port 80 pour HTTP, le port 443 pour HTTPS, ou le port 22 pour SSH.
-- **Ports enregistrés** (1024-49151) : Ces ports peuvent être utilisés par des applications non standards, mais qui sont enregistrées auprès de l'IANA (Internet Assigned Numbers Authority) pour éviter les conflits.
-- **Ports dynamiques ou privés** (49152-65535) : Ces ports sont généralement utilisés par des applications pour des connexions temporaires ou pour des échanges de données avec des serveurs.
+-   **Well-known ports** (0-1023): These ports are reserved for standard services, such as port 80 for HTTP, port 443 for HTTPS, or port 22 for SSH.
+-   **Registered ports** (1024-49151): These ports can be used by non-standard applications, but which are registered with the IANA (Internet Assigned Numbers Authority) to avoid conflicts.
+-   **Dynamic or private ports** (49152-65535): These ports are generally used by applications for temporary connections or for data exchanges with servers.
 
-En résumé, un port est un identifiant utilisé pour diriger le trafic réseau vers le bon service sur un appareil donné. Par exemple, un serveur web écoute sur le port 80 pour recevoir les requêtes HTTP des clients.
+In summary, a port is an identifier used to direct network traffic to the correct service on a given device. For example, a web server listens on port 80 to receive HTTP requests from clients.
 
-### Pourquoi les ports apparaissent 2 fois quand j’examine le status de ufw?
+### Why do ports appear twice when I check the ufw status?
 
-Les ports apparaissent deux fois dans la sortie de `ufw status verbose` parce que le pare-feu UFW gère à la fois les connexions IPv4 et IPv6.
+The ports appear twice in the output of `ufw status verbose` because the UFW firewall manages both IPv4 and IPv6 connections.
 
-**IPv4** (Internet Protocol version 4) et **IPv6** (Internet Protocol version 6) sont deux versions du protocole Internet utilisées pour adresser et acheminer les données sur Internet. IPv6 offre une capacité d'adressage beaucoup plus grande qu'IPv4, ce qui permet de connecter beaucoup plus d'appareils à Internet. Les adresses IPv4 sont plus courtes et sont écrites en décimal, tandis que les adresses IPv6 sont plus longues et sont écrites en hexadécimal. IPv6 dispose d'un mécanisme de configuration automatique des adresses, ce qui facilite la gestion des réseaux. IPv6 a été conçu avec des améliorations de sécurité par rapport à IPv4, notamment avec le chiffrement des données. Bien que IPv6 soit plus moderne et offre des avantages pour l'avenir d'Internet, IPv4 reste encore largement utilisé, et la transition entre les deux protocoles est en cours. Les deux peuvent coexister sur le même réseau.
+**IPv4** (Internet Protocol version 4) and **IPv6** (Internet Protocol version 6) are two versions of the Internet Protocol used to address and route data on the Internet. IPv6 offers a much larger addressing capacity than IPv4, which allows many more devices to be connected to the Internet. IPv4 addresses are shorter and are written in decimal, while IPv6 addresses are longer and are written in hexadecimal. IPv6 has an automatic address configuration mechanism, which facilitates network management. IPv6 was designed with security improvements over IPv4, including data encryption. Although IPv6 is more modern and offers advantages for the future of the Internet, IPv4 is still widely used, and the transition between the two protocols is ongoing. Both can coexist on the same network.
 
-Commandes pour gérer les ports:
+Commands to manage ports:
 
-**`sudo ufw allow <port>`**  autorise le traffic sur le port <port>
+**`sudo ufw allow <port>`** allows traffic on port <port>
 
-**`sudo ufw deny <port>`**  bloque le traffic sur le port <port>
+**`sudo ufw deny <port>`** blocks traffic on port <port>
 
-**`sudo ufw delete allow <port>`**  retire l’autorisation
+**`sudo ufw delete allow <port>`** removes the authorization
 
-**`sudo ufw delete deny <port>`**  retire le blocage
+**`sudo ufw delete deny <port>`** removes the block
 
-## Configurer SSH
+## Configure SSH
 
-La première étape est d’installer OpenSSH.
+The first step is to install OpenSSH.
 
-**OpenSSH (Open Secure Shell)** est un ensemble d'outils et de protocoles permettant de sécuriser les communications réseau, principalement via la commande **SSH (Secure Shell)**. Il est utilisé pour établir des connexions à distance sécurisées entre ordinateurs, ce qui permet de se connecter à un serveur à travers un réseau tout en chiffrant les échanges pour garantir la confidentialité et l'intégrité des données. Voici quelques points clés concernant OpenSSH :
+**OpenSSH (Open Secure Shell)** is a set of tools and protocols for securing network communications, primarily via the **SSH (Secure Shell)** command. It is used to establish secure remote connections between computers, which allows you to connect to a server across a network while encrypting the exchanges to ensure the confidentiality and integrity of the data. Here are some key points about OpenSSH:
 
-- **SSH** : OpenSSH permet d'utiliser le protocole SSH, qui est une méthode sécurisée pour se connecter à un autre ordinateur (généralement un serveur) via une interface de ligne de commande. SSH remplace les protocoles non sécurisés comme Telnet et rlogin.
-- **Chiffrement** : SSH chiffre toutes les données échangées entre l'utilisateur et le serveur, garantissant ainsi que même si la communication est interceptée, les informations restent protégées.
-- **Authentification** : OpenSSH permet une authentification forte via des mots de passe ou des clés cryptographiques (par exemple, clés publiques et privées) pour garantir que seules les personnes autorisées puissent se connecter.
-- **SFTP et SCP** : OpenSSH inclut des outils pour transférer des fichiers de manière sécurisée. **SFTP (Secure File Transfer Protocol)** et **SCP (Secure Copy Protocol)** permettent de copier des fichiers entre ordinateurs de manière chiffrée.
+-   **SSH**: OpenSSH allows the use of the SSH protocol, which is a secure method for connecting to another computer (usually a server) via a command line interface. SSH replaces insecure protocols like Telnet and rlogin.
+-   **Encryption**: SSH encrypts all data exchanged between the user and the server, thus ensuring that even if the communication is intercepted, the information remains protected.
+-   **Authentication**: OpenSSH allows strong authentication via passwords or cryptographic keys (for example, public and private keys) to ensure that only authorized people can connect.
+-   **SFTP and SCP**: OpenSSH includes tools for securely transferring files. **SFTP (Secure File Transfer Protocol)** and **SCP (Secure Copy Protocol)** allow you to copy files between computers in an encrypted manner.
 
-En résumé, OpenSSH est une solution fiable et largement utilisée pour gérer des connexions à distance sécurisées entre ordinateurs sur un réseau, offrant une authentification forte et un chiffrement des données.
+In summary, OpenSSH is a reliable and widely used solution for managing secure remote connections between computers on a network, offering strong authentication and data encryption.
 
-**`sudo apt install openssh-server`**  installe OpenSSH
+**`sudo apt install openssh-server`** installs OpenSSH
 
-**`sudo systemctl status ssh`**  vérifie le statut de SSH
+**`sudo systemctl status ssh`** checks the status of SSH
 
-Le port par défaut pour SSH est le port 22, toutefois il est possible de le changer (et c’est demandé dans le sujet). Pour changer le port écouté, il faut modifier le fichier de configuration de SSH situé à `/etc/ssh/sshd_config` 
+The default port for SSH is port 22, however it is possible to change it (and it is requested in the subject). To change the listening port, you must modify the SSH configuration file located at `/etc/ssh/sshd_config`
 
-**`sudo nano /etc/ssh/sshd_config`** ouvre le fichier en question avec nano
-Pour changer le port écouté il faut chercher la ligne `#Port 22` , la décommenter et remplacer le numéro de port par le numéro désiré (4242 en l’occurence)
-**`sudo systemctl restart ssh`**  permet de redémarrer le service (nécéssaire après avoir changé le port) 
+**`sudo nano /etc/ssh/sshd_config`** opens the file in question with nano
+To change the listening port, you must find the line `#Port 22`, uncomment it and replace the port number with the desired number (4242 in this case)
+**`sudo systemctl restart ssh`** allows you to restart the service (necessary after changing the port)
 
-**`sudo ufw allow 4242`**  autorise le traffic sur le port 4242
+**`sudo ufw allow 4242`** allows traffic on port 4242
 
-### Configurer la redirection de port dans Virtualbox
+### Configure port forwarding in Virtualbox
 
-**La redirection de port** dans **VirtualBox** permet de faire communiquer l'**hôte** (votre machine physique) avec la **machine virtuelle** (VM). Elle est particulièrement utile lorsque vous voulez accéder à des services (comme un serveur web, un serveur SSH, etc.) qui sont en cours d'exécution dans la VM, mais vous ne souhaitez pas qu'ils soient directement exposés à internet. En d'autres termes, la redirection de port permet à la machine virtuelle d'écouter sur un port spécifique tout en faisant en sorte que ce port soit accessible depuis l'extérieur de la VM, à travers un port sur l'hôte.
+**Port forwarding** in **VirtualBox** allows the **host** (your physical machine) to communicate with the **virtual machine** (VM). It is particularly useful when you want to access services (like a web server, an SSH server, etc.) that are running in the VM, but you do not want them to be directly exposed to the internet. In other words, port forwarding allows the virtual machine to listen on a specific port while making that port accessible from outside the VM, through a port on the host.
 
-Dans Virtualbox il faut sélectionner sa VM, cliquer sur “Configuration” >> “Réseau” >> “Redirection de port” et “ajouter une nouvelle règle de redirection” (le petit + à droite). remplir les champs de la façon suivante: Nom: Port 4242, Protocole: TCP, Port hôte: 4242, Port invité: 4242. Puis dans la VM redémarrer à nouveau SSH.
+In Virtualbox you must select your VM, click on "Configuration" >> "Network" >> "Port Forwarding" and "add a new forwarding rule" (the small + on the right). fill in the fields as follows: Name: Port 4242, Protocol: TCP, Host Port: 4242, Guest Port: 4242. Then in the VM restart SSH again.
 
-### C’est quoi TCP?
+### What is TCP?
 
-Le **protocole TCP** (Transmission Control Protocol) est un protocole de communication utilisé dans les réseaux informatiques pour garantir la transmission fiable et ordonnée des données entre deux ordinateurs. Il est souvent utilisé en complément du protocole IP (Internet Protocol), formant ainsi le couple TCP/IP.
+The **TCP protocol** (Transmission Control Protocol) is a communication protocol used in computer networks to ensure the reliable and orderly transmission of data between two computers. It is often used in conjunction with the IP protocol (Internet Protocol), thus forming the TCP/IP pair.
 
-TCP est utilisé par des applications nécessitant une transmission fiable des données, comme le web (HTTP), l'envoi d'emails (SMTP), ou le transfert de fichiers (FTP).
+TCP is used by applications requiring reliable data transmission, such as the web (HTTP), sending emails (SMTP), or transferring files (FTP).
 
-### Connexion depuis le terminal hôte
+### Connection from the host terminal
 
-Pour se connecter à sa VM depuis le terminal de l’ordinateur hôte, il faut ouvrir un terminal et taper la commande:
+To connect to your VM from the host computer's terminal, you must open a terminal and type the command:
 
-**`ssh <username>@localhost -p 4242`**  permet de se connecter à un serveur via SSH (Secure Shell) en utilisant l'utilisateur spécifié (`<username>`) sur la machine locale (`localhost`). Le `-p 4242` indique que la connexion SSH doit se faire via le port `4242` au lieu du port SSH par défaut (qui est le port `22`).
+**`ssh <username>@localhost -p 4242`** allows you to connect to a server via SSH (Secure Shell) using the specified user (`<username>`) on the local machine (`localhost`). The `-p 4242` indicates that the SSH connection should be made via port `4242` instead of the default SSH port (which is port `22`).
 
-**Bloquer les connexions ssh en tant que superutilisateur root:** Il faut modifier le fichier de configuration SSH (`sshd_config`) pour respecter cette consigne de l’énoncé.
+**Block ssh connections as root superuser:** You must modify the SSH configuration file (`sshd_config`) to comply with this instruction from the statement.
 
-**`sudo nano /etc/ssh/sshd_config`**  ouvre le fichier de configuration SSH
+**`sudo nano /etc/ssh/sshd_config`** opens the SSH configuration file
 
-Il faut ensuite chercher la ligne `PermitRootLogin`  la décommenter, et définir sa valeur à “no”
+You must then find the line `PermitRootLogin`, uncomment it, and set its value to "no"
 
 ```bash
 PermitRootLogin no
 ```
 
-## Politique de mot de passe
+## Password policy
 
-Vous pouvez configurer certaines règles de politique de mot de passe directement via le fichier **`/etc/login.defs`**. Ce fichier contient des paramètres globaux pour l'authentification des utilisateurs, y compris la gestion des mots de passe.
+You can configure certain password policy rules directly via the **`/etc/login.defs`** file. This file contains global settings for user authentication, including password management.
 
-Sous “password aging control” modifier comme suit:
+Under "password aging control" modify as follows:
 
 ```bash
-# Le mot de passe doit être changé tous les 30 jours
+# The password must be changed every 30 days
 PASS_MAX_DAYS 30
 
-# Il doit y avoir un minimum de 2 jours entre chaque changement de mot de passe
+# There must be a minimum of 2 days between each password change
 PASS_MIN_DAYS 2
 
-# L'utilisateur sera averti 7 jours avant l'expiration du mot de passe
+# The user will be warned 7 days before the password expires
 PASS_WARN_AGE 7
 ```
 
-**Les changements ne s’appliquent pas automatiquement aux utilisateurs existants,** il faut donc utiliser la commande **`chage`** pour faire les changements sur les utilisateurs existants (avec sudo).
+**The changes do not apply automatically to existing users,** so you must use the **`chage`** command to make the changes on existing users (with sudo).
 
-**`sudo chage -M 30 <username>`**  le mot de passe doit être changé tous les 30 jours
+**`sudo chage -M 30 <username>`** the password must be changed every 30 days
 
-**`sudo chage -m 2 <username>`**  il doit y avoir 2 jours minimum entre chaque changement de mot de passe
+**`sudo chage -m 2 <username>`** there must be a minimum of 2 days between each password change
 
-**`sudo chage -W 7 <username>`**  l’utilisateur sera averti 7 jours avant expiration
+**`sudo chage -W 7 <username>`** the user will be warned 7 days before expiration
 
-**`chage -l <username>`**  voir les paramètres de mot de passe appliqués à l’utilisateur <username>
+**`chage -l <username>`** see the password settings applied to the user <username>
 
-### La bibliothèque libpwquality
+### The libpwquality library
 
-Le fichier **`pwquality.conf`** est un fichier de configuration utilisé par la bibliothèque **libpwquality**, qui est responsable de la gestion des politiques de qualité des mots de passe sous Linux. Ce fichier permet d'appliquer des règles de sécurité aux mots de passe afin d'assurer qu'ils répondent à certains critères de complexité.
+The **`pwquality.conf`** file is a configuration file used by the **libpwquality** library, which is responsible for managing password quality policies under Linux. This file allows you to apply security rules to passwords to ensure that they meet certain complexity criteria.
 
-Lorsqu'un utilisateur tente de changer son mot de passe, la bibliothèque **libpwquality** vérifie que le nouveau mot de passe respecte les règles définies dans **`pwquality.conf`**. Si le mot de passe ne respecte pas les critères, il sera rejeté et l'utilisateur sera invité à en choisir un autre.
+When a user tries to change their password, the **libpwquality** library checks that the new password respects the rules defined in **`pwquality.conf`**. If the password does not meet the criteria, it will be rejected and the user will be prompted to choose another one.
 
-Sur une machine Debian ou similaire, le fichier **`pwquality.conf`** se trouve généralement à cet emplacement : **`/etc/security/pwquality.conf`**
+On a Debian or similar machine, the **`pwquality.conf`** file is usually located at: **`/etc/security/pwquality.conf`**
 
-Ouvrez le fichier avec nano et éditez le pour qu’il ressemble à ça:
+Open the file with nano and edit it to look like this:
 
 ```bash
 # Number of characters in the new password that must not be present in the 
@@ -533,15 +532,15 @@ enforce_for_root
 
 ```
 
-### Modifier les règles pour le superutilisateur root
+### Modify the rules for the root superuser
 
-Le superutilisateur root doit être soumis aux même règles de mot de passe sauf en ce qui concerne le “difok” (le nombre de caractères dans le nouveau mot de passe qui ne doivent pas être présent dans l’ancien).
+The root superuser must be subject to the same password rules except for "difok" (the number of characters in the new password that must not be present in the old one).
 
-**Vous devez donc créer un fichier spécifique pour root:**
+**You must therefore create a specific file for root:**
 
  **`/etc/security/pwquality-root.conf`**
 
-et l’éditer avec nano pour qu’il soit identique au **`pwquality.conf`**  à l’exception de la ligne concernant “difok” puisque nous ne voulons pas imposer de règle à ce paramètre.
+and edit it with nano so that it is identical to **`pwquality.conf`** with the exception of the line concerning "difok" since we do not want to impose a rule on this parameter.
 
 ```bash
 # Number of characters in the new password that must not be present in the 
@@ -575,15 +574,15 @@ enforce_for_root
 
 ```
 
-**Modifier le fichier PAM pour distinguer root des autres utilisateurs:**
+**Modify the PAM file to distinguish root from other users:**
 
-Éditez le fichier PAM `/etc/pam.d/common-password` (avec **`sudo`**  pour pouvoir écrire) et juste **au-dessus** de la ligne:
+Edit the PAM file `/etc/pam.d/common-password` (with **`sudo`** to be able to write) and just **above** the line:
 
 ```bash
 password	requisite			pam_pwquality.so retry=3
 ```
 
-ajoutez les lignes suivantes:
+add the following lines:
 
 ```bash
 # verify if user is root:
@@ -592,207 +591,207 @@ auth [success=1 default=ignore] pam_succeed_if.so uid=0
 password	requisite			pam_pwquality.so retry=3 conf=/etc/security/pwquality-root.conf
 ```
 
-Ainsi si l'utilisateur est **root**, le système va utiliser les règles définies dans le fichier **`/etc/security/pwquality-root.conf`**  au lieu de **`/etc/security/pwquality.conf`** 
+Thus if the user is **root**, the system will use the rules defined in the file **`/etc/security/pwquality-root.conf`** instead of **`/etc/security/pwquality.conf`**
 
-La configuration de la politique de mot de passe est terminée, vous pouvez modifier les mots de passe existants pour qu’ils soient conforme à la nouvelle politique de mot de passe avec la commande: **`sudo passwd <username>`**  
+The password policy configuration is complete, you can change the existing passwords so that they comply with the new password policy with the command: **`sudo passwd <username>`**
 
-### C’est quoi PAM?
+### What is PAM?
 
-PAM (**Pluggable Authentication Modules**) est un système modulaire utilisé sur les systèmes Unix/Linux pour gérer l'authentification. Il permet d'intégrer différentes méthodes d'authentification (mots de passe, biométrie, clés SSH, etc.) et de configurer des règles de sécurité de manière centralisée pour les applications et services.
+PAM (**Pluggable Authentication Modules**) is a modular system used on Unix/Linux systems to manage authentication. It allows you to integrate different authentication methods (passwords, biometrics, SSH keys, etc.) and to configure security rules centrally for applications and services.
 
-## Autres commandes à connaître
+## Other commands to know
 
-Les commandes pour gérer les utilisateurs nécessitent l’emploie de **`sudo`  dans la plupart des cas (à partir du moment où la commande modifie quelque chose).**
+The commands for managing users require the use of **`sudo` in most cases (from the moment the command modifies something).**
 
-### Nom d’hôte
+### Hostname
 
-**`sudo hostnamectl set-hostname <new_hostname>`** changer le nom d’hôte en <new_hostname>
+**`sudo hostnamectl set-hostname <new_hostname>`** change the hostname to <new_hostname>
 
-**`hostnamectl status`** affiche les informations du système
+**`hostnamectl status`** displays system information
 
-La commande **`hostnamectl`** permet de gérer le **nom d'hôte** (hostname) d'une machine sous Linux. Elle permet de **voir, définir ou modifier** le nom d'hôte, ainsi que d'autres informations liées au système, comme le type de matériel ou la version du système d'exploitation.
+The **`hostnamectl`** command allows you to manage the **hostname** of a machine under Linux. It allows you to **see, set or modify** the hostname, as well as other information related to the system, such as the hardware type or the operating system version.
 
-### Ajouter des utilisateurs
+### Add users
 
-Les commandes pour gérer les utilisateurs (ajouter, supprimer, etc) nécessitent d’être exécutées avec **`sudo` :**
+The commands for managing users (add, delete, etc.) need to be executed with **`sudo`:**
 
-`adduser <username>` : Crée un nouvel utilisateur avec des interface interactives (création du répertoire personnel, du mot de passe, possibilité de renseigner des informations comme le numéro de téléphone de l’utilisateur, son numéro de chambre, etc)
+`adduser <username>`: Creates a new user with interactive interfaces (creation of the home directory, password, possibility of providing information such as the user's phone number, their room number, etc.)
 
-`useradd <username>` : Crée un utilisateur avec des options personnalisées (moins interactif).
+`useradd <username>`: Creates a user with custom options (less interactive).
 
-Contrairement à adduser, useradd crée uniquement l'utilisateur avec des paramètres de base et n'initialise pas automatiquement des configurations comme le dossier personnel, les scripts de démarrage, etc., à moins d'utiliser des options spécifiques. Nécessite d'ajouter des options ou de modifier les fichiers système manuellement pour des configurations spécifiques. Exemples :
+Unlike adduser, useradd only creates the user with basic settings and does not automatically initialize configurations such as the home folder, startup scripts, etc., unless specific options are used. Requires adding options or modifying system files manually for specific configurations. Examples:
 
-- `m` : Crée le répertoire personnel.
-- `s` : Définit le shell par défaut.
-- `G` : Ajoute l'utilisateur à un groupe.
+-   `m`: Creates the home directory.
+-   `s`: Sets the default shell.
+-   `G`: Adds the user to a group.
 
-### Supprimer des utilisateurs
+### Delete users
 
-`deluser <username>` : Supprime un utilisateur tout en conservant son répertoire personnel (optionnellement).
+`deluser <username>`: Deletes a user while keeping their home directory (optionally).
 
-`userdel -r <username>` : Supprime un utilisateur et son répertoire personnel.
+`userdel -r <username>`: Deletes a user and their home directory.
 
-`userdel` est une commande basique pour supprimer un utilisateur, mais elle ne supprime pas automatiquement son répertoire personnel et ses fichiers associés, sauf avec l'option `-r`. En revanche, `deluser` est un outil plus complet et convivial, souvent fourni par le paquet `adduser`, qui supprime non seulement l'utilisateur, mais aussi ses fichiers et répertoires associés de manière plus propre et sécurisée.
+`userdel` is a basic command for deleting a user, but it does not automatically delete their home directory and associated files, except with the `-r` option. In contrast, `deluser` is a more complete and user-friendly tool, often provided by the `adduser` package, which not only deletes the user, but also their associated files and directories in a cleaner and more secure way.
 
-### Modifier et lister les utilisateurs
+### Modify and list users
 
-`id <username>` : Affiche l'UID, GID et les groupes de l'utilisateur.
+`id <username>`: Displays the UID, GID and groups of the user.
 
-`id -g <username>` : Affiche le GID principal de l’utilisateur.
+`id -g <username>`: Displays the user's primary GID.
 
-Le **GID principal** (Group ID) d'un utilisateur est l'identifiant du groupe principal auquel cet utilisateur appartient. Lorsqu'un utilisateur est créé, un groupe portant le même nom est souvent créé automatiquement, et ce groupe devient le groupe principal de l'utilisateur. Le GID principal est utilisé pour définir les permissions d'accès aux fichiers et répertoires, et détermine les autorisations par défaut de l'utilisateur pour les fichiers qu'il crée.
+The **primary GID** (Group ID) of a user is the identifier of the main group to which that user belongs. When a user is created, a group with the same name is often created automatically, and this group becomes the user's primary group. The primary GID is used to define file and directory access permissions, and determines the user's default permissions for the files they create.
 
-`usermod -L <username>` : Verrouille un compte (désactive le mot de passe) sans le supprimer (*lock*).
+`usermod -L <username>`: Locks an account (disables the password) without deleting it (*lock*).
 
-`usermod -U <username>` : Déverrouille un compte (*unlock*).
+`usermod -U <username>`: Unlocks an account (*unlock*).
 
-`usermod` est une commande utilisée pour modifier un utilisateur existant sur un système Linux. Elle permet d'ajuster les paramètres d'un compte utilisateur, comme changer le groupe principal ou ajouter des groupes secondaires, modifier le shell par défaut, renommer un utilisateur, verrouiller ou déverrouiller un compte, et changer le répertoire personnel ou déplacer son contenu.
+`usermod` is a command used to modify an existing user on a Linux system. It allows you to adjust the settings of a user account, such as changing the primary group or adding secondary groups, modifying the default shell, renaming a user, locking or unlocking an account, and changing the home directory or moving its content.
 
-`passwd <username>` : Modifie le mot de passe d’un utilisateur.
+`passwd <username>`: Changes a user's password.
 
-`cat /etc/passwd` : Affiche tous les utilisateurs du système.
+`cat /etc/passwd`: Displays all users on the system.
 
-`awk -F: '$3 >= 1000 {print $1}' /etc/passwd` : Affiche uniquement les utilisateurs “humains”
+`awk -F: '$3 >= 1000 {print $1}' /etc/passwd`: Displays only "human" users
 
-### C’est quoi tous ces utilisateurs?
+### What are all these users?
 
-Les utilisateurs que vous voyez dans le fichier `/etc/passwd` ne sont pas uniquement les utilisateurs que vous avez créés. En effet, ce fichier contient également des **utilisateurs système** créés par le système ou par les logiciels pour des tâches spécifiques. Ces utilisateurs système n'ont souvent pas de répertoire personnel ou de shell et sont utilisés par des services et des processus pour fonctionner de manière sécurisée, sans avoir besoin d'un accès complet à l'environnement utilisateur. Par exemple: daemon, bin, sys, mail sont des utilisateurs associés à des services système, tels que des processus de gestion des mails ou des services de base.
+The users you see in the `/etc/passwd` file are not only the users you have created. Indeed, this file also contains **system users** created by the system or by software for specific tasks. These system users often do not have a home directory or a shell and are used by services and processes to operate securely, without needing full access to the user environment. For example: daemon, bin, sys, mail are users associated with system services, such as mail management processes or basic services.
 
-La commande `awk -F: '$3 >= 1000 {print $1}' /etc/passwd` filtre les utilisateurs dont l’UID (troisième champ dans le fichier /etc/passwd)  est supérieur à 1000 et n’affiche que le nom (premier champ) car les utilisateurs système ont généralement des UID inférieurs à 1000 (une exception par exemple est l’utilisateur système nobody)
+The command `awk -F: '$3 >= 1000 {print $1}' /etc/passwd` filters users whose UID (third field in the /etc/passwd file) is greater than 1000 and only displays the name (first field) because system users generally have UIDs less than 1000 (an exception for example is the system user nobody)
 
-`who` : Liste les utilisateurs connectés.
+`who`: Lists connected users.
 
-`w` : Donne des informations détaillées sur les sessions des utilisateurs.
+`w`: Gives detailed information about user sessions.
 
-### Gérer les groupes
+### Manage groups
 
-`groupadd <group>`  **créer un nouveau groupe** 
+`groupadd <group>` **create a new group**
 
-`groupdel <group>`   supprime un groupe
+`groupdel <group>` deletes a group
 
-`getent group <group>`  affiche la liste des membres d’un groupe
+`getent group <group>` displays the list of members of a group
 
-`groups <username>` liste les groupes auxquels appartient l'utilisateur.
+`groups <username>` lists the groups to which the user belongs.
 
-`usermod -aG <group> <username>` : Ajoute un utilisateur à un groupe.
+`usermod -aG <group> <username>`: Adds a user to a group.
 
-## Script Monitoring.sh
+## Monitoring.sh script
 
-Le script doit être réalisé en tant qu’utilisateur root et enregistré dans le dossier `/root` .
+The script must be created as the root user and saved in the `/root` folder.
 
-Pour réaliser ce script, il suffit de déclarer des variables et d’y stocker les résultats des commandes détaillées plus bas, puis d’afficher le tout à l’aide de `echo` et de `| wall`  pour que le message soit envoyé à tous les utilisateurs connectés.
+To create this script, you just need to declare variables and store the results of the commands detailed below, then display everything using `echo` and `| wall` so that the message is sent to all connected users.
 
-### Quelques bases de script bash
+### Some basics of bash scripting
 
-**Un script bash commence par une ligne appelée shebang** (`#!/bin/bash`) qui spécifie l'interpréteur à utiliser pour exécuter le script. Dans cet exemple, elle indique que le script doit être exécuté avec l'interpréteur **Bash**. Cela permet au système d'utiliser automatiquement le bon programme pour exécuter le script, même si celui-ci est lancé directement.
+**A bash script starts with a line called a shebang** (`#!/bin/bash`) which specifies the interpreter to use to execute the script. In this example, it indicates that the script should be executed with the **Bash** interpreter. This allows the system to automatically use the correct program to execute the script, even if it is launched directly.
 
-**En bash on peut affecter le résultat d’une commande à une variable** comme ceci:
+**In bash you can assign the result of a command to a variable** like this:
 
 ```bash
-variable=$(commande)
+variable=$(command)
 ```
 
-**Pour accéder à la valeur d’une variable** on utilise la syntaxe suivante:
+**To access the value of a variable** we use the following syntax:
 
 ```bash
 $variable
 ```
 
-`echo`  permet d’afficher une chaîne de caractères ou la valeur d’une variable dans le terminal.
+`echo` displays a string of characters or the value of a variable in the terminal.
 
-`wall`  envoie un message à tous les utilisateurs connectés à la machine.
+`wall` sends a message to all users connected to the machine.
 
-`|` permet de rediriger la sortie d’une commande vers l’entrée d’une autre commande.
+`|` allows you to redirect the output of one command to the input of another command.
 
-### Exemple avec la commande `date` qui retourne la date et l’heure:
+### Example with the `date` command which returns the date and time:
 
 ```bash
 #!/bin/bash
 
 message=$(date)
 echo $message | wall
-# Ce script enverra la date et l'heure retournées par la commande date
-# à tous les utilisateurs connectés
+# This script will send the date and time returned by the date command
+# to all connected users
 ```
 
-### Le script commenté
+### The commented script
 
 ```bash
 #!/bin/bash
 
-# Récupère l'architecture du système, la version du noyau, et le type de système (ex: x86_64, Linux, GNU)
+# Retrieves the system architecture, kernel version, and system type (e.g., x86_64, Linux, GNU)
 arch=$(uname -srmo)
 
-# Récupère la version du noyau du système
+# Retrieves the system kernel version
 karnel=$(uname -v)
 
-# Nombre de CPU physiques détectés sur le système
-# Cette commande lit le fichier /proc/cpuinfo, filtre les lignes contenant "physical id", 
-# supprime les doublons avec sort -u et compte le nombre de lignes avec wc -l
+# Number of physical CPUs detected on the system
+# This command reads the /proc/cpuinfo file, filters the lines containing "physical id", 
+# removes duplicates with sort -u and counts the number of lines with wc -l
 pcpu=$(cat /proc/cpuinfo | grep "physical id" | sort -u | wc -l)
 
-# Nombre de CPU virtuels détectés sur le système
-# Cette commande lit le fichier /proc/cpuinfo, filtre les lignes contenant "processor", 
-# puis compte le nombre de processeurs avec wc -l
+# Number of virtual CPUs detected on the system
+# This command reads the /proc/cpuinfo file, filters the lines containing "processor", 
+# then counts the number of processors with wc -l
 vcpu=$(cat /proc/cpuinfo | grep "processor" | sort -u | wc -l)
 
-# Calcul de l'utilisation du CPU en pourcentage
-# Utilise la commande top pour afficher les statistiques des processus, filtre les lignes contenant 'Cpu', 
-# puis calcule l'utilisation du CPU avec awk en additionnant l'usage des processus utilisateur et système
+# Calculation of CPU usage in percentage
+# Uses the top command to display process statistics, filters the lines containing 'Cpu', 
+# then calculates CPU usage with awk by adding user and system process usage
 cpu_used=$(top -bn1 | grep 'Cpu' | xargs | awk '{printf("%.1f%%"), $2 + $4}')
 
-# Récupère la mémoire totale (RAM) disponible sur le système
+# Retrieves the total memory (RAM) available on the system
 mem_total=$(free -h | grep Mem | awk '{print $2}')
 
-# Récupère la mémoire (RAM) utilisée sur le système
+# Retrieves the used memory (RAM) on the system
 mem_used=$(free -h | grep Mem | awk '{print $3}')
 
-# Calcule le pourcentage de la mémoire utilisée
+# Calculates the percentage of used memory
 mem_perc=$(free -k | grep Mem | awk '{printf("%.2f%%"), $3 / $2 * 100}')
 
-# Récupère l'espace disque total disponible sur le système
+# Retrieves the total disk space available on the system
 hdd_total=$(df -h --total | grep "total" | awk '{print $2}')
 
-# Récupère l'espace disque utilisé sur le système
+# Retrieves the used disk space on the system
 hdd_used=$(df -h --total | grep "total" | awk '{print $3}')
 
-# Récupère l'utilisation de l'espace disque en pourcentage
+# Retrieves the disk space usage in percentage
 hdd_perc=$(df -h --total | grep "total" | awk '{print $5}')
 
-# Récupère la dernière date et heure du redémarrage du système
+# Retrieves the last date and time of the system reboot
 reboot=$(who -b | awk '{print($3 " " $4)}')
 
-# Récupère la date et l'heure actuelles au format YYYY-MM-DD et HH:MM:SS
+# Retrieves the current date and time in YYYY-MM-DD and HH:MM:SS format
 actual_time=$(date +%Y-%m-%d && date +%H:%M:%S)
 
-# Nombre de connexions TCP actives
-# Cette commande récupère les informations des connexions TCP dans /proc/net/sockstat 
-# et extrait le nombre de connexions actives
+# Number of active TCP connections
+# This command retrieves TCP connection information from /proc/net/sockstat 
+# and extracts the number of active connections
 tcp=$(grep TCP /proc/net/sockstat | awk '{print $3}')
 
-# Nombre d'utilisateurs actuellement connectés au système
-# Cette commande utilise "who" pour lister les utilisateurs connectés et "wc -l" pour compter le nombre de lignes
+# Number of users currently connected to the system
+# This command uses "who" to list connected users and "wc -l" to count the number of lines
 user_conn=$(who | wc -l)
 
-# Adresse IPv4 de la machine
+# IPv4 address of the machine
 ipv4=$(hostname -I)
 
-# Adresse MAC de la machine
+# MAC address of the machine
 mac=$(ip link show | grep ether | cut -c 16-32)
 
-# Nombre de commandes exécutées avec sudo
-# La commande recherche les lignes contenant "COMMAND=" dans le fichier de log sudo et compte le nombre d'occurrences
+# Number of commands executed with sudo
+# The command searches for lines containing "COMMAND=" in the sudo log file and counts the number of occurrences
 sudo=$(sudo grep "COMMAND=" /var/log/sudo/sudo.log | wc -l)
 
-# Vérifie si LVM (Logical Volume Manager) est activé sur le système
-# Cette commande utilise lsblk pour lister les périphériques et vérifier s'il existe des volumes LVM
+# Checks if LVM (Logical Volume Manager) is enabled on the system
+# This command uses lsblk to list devices and check if LVM volumes exist
 lvm=$(if [ $(lsblk | grep lvm | wc -l) -eq 0 ]; then
                  echo "Disable"
              else
                  echo "Enable"
              fi)
 
-# Affiche les informations système collectées et les envoie à tous les utilisateurs connectés via la commande wall
+# Displays the collected system information and sends it to all connected users via the wall command
 echo "
 	________________________________________________________________________
 	MONITORING		
@@ -816,95 +815,95 @@ echo "
 
 ```
 
-N’oubliez pas de donner les permissions d’exécution avec la commande `chmod 755 monitoring.sh` .
+Don't forget to give execution permissions with the command `chmod 755 monitoring.sh`.
 
-## Exécuter une tache de manière automatisée
+## Execute a task automatically
 
-Pour automatiser l'exécution de tâches à des horaires spécifiques, il faut un **planificateur de tâches** ou **démon de planification** comme **cron.**
+To automate the execution of tasks at specific times, you need a **task scheduler** or **scheduling daemon** like **cron.**
 
-**Cron** est un utilitaire sous Linux permettant d'exécuter des tâches automatisées à des moments spécifiques. Ces tâches, appelées **jobs**, peuvent être programmées pour s'exécuter à intervalles réguliers (comme toutes les heures, chaque jour, etc.).
-Il faut d’abord activer **cron** pour qu’il démarre automatiquement à chaque démarrage du système avec la commande suivante: **`systemctl enable cron`** 
+**Cron** is a utility under Linux for executing automated tasks at specific times. These tasks, called **jobs**, can be scheduled to run at regular intervals (like every hour, every day, etc.).
+You must first enable **cron** so that it starts automatically at each system startup with the following command: **`systemctl enable cron`**
 
-### La crontab
+### The crontab
 
-La crontab est le fichier qui contient les taches à exécuter et les dates et heures des exécutions programmées. Voici comment elle fonctionne:
+The crontab is the file that contains the tasks to be executed and the dates and times of the scheduled executions. Here is how it works:
 
-1. **`crontab -e`** : Cette commande permet de modifier le fichier crontab de l'utilisateur actuel (elle ouvre un éditeur de texte pour modifier le fichier idoine).
-2. **Format** : Un fichier crontab contient des lignes avec cinq champs horaires (minute, heure, jour du mois, mois, jour de la semaine) suivis de la commande à exécuter.
-3. Exemple : `30 14 * * 1 /home/user/backup.sh` exécutera le script `backup.sh` chaque lundi à 14h30.
-4. On peut définir plusieurs valeurs par champs (par exemple `30,40 14 * * 1`   pour que l’exécution se fasse à 14h30 et 14h40 chaque lundi) ou des plages de valeurs (comme par exemple **`1-5`**  qui signifie 1, 2, 3 4 et 5).
-5. Une autre façon d définir plusieurs valeurs est par exemple: `*/10 14 * * 1`   qui signifie à chaque fois que les minutes forment un multiple de dix (c’est à dire toutes les dix minutes), à 14h, les lundis.
-6. Les champs `*` signifient “n’importe quel” ou “tous” (par exemple * sur le champ des moi signifie que la commande sera exécutée quel que soit le mois).
+1.  **`crontab -e`**: This command allows you to modify the crontab file of the current user (it opens a text editor to modify the appropriate file).
+2.  **Format**: A crontab file contains lines with five time fields (minute, hour, day of the month, month, day of the week) followed by the command to be executed.
+3.  Example: `30 14 * * 1 /home/user/backup.sh` will execute the `backup.sh` script every Monday at 2:30 PM.
+4.  You can define several values per field (for example `30,40 14 * * 1` for the execution to take place at 2:30 PM and 2:40 PM every Monday) or ranges of values (like for example **`1-5`** which means 1, 2, 3, 4 and 5).
+5.  Another way to define several values is for example: `*/10 14 * * 1` which means every time the minutes form a multiple of ten (i.e. every ten minutes), at 2 PM, on Mondays.
+6.  The `*` fields mean "any" or "all" (for example * on the month field means that the command will be executed regardless of the month).
 
-Vous pouvez aussi voir les jobs planifiés avec **`crontab -l`** et supprimer un job avec **`crontab -r`**.
+You can also see the scheduled jobs with **`crontab -l`** and delete a job with **`crontab -r`**.
 
-### Créer la crontab pour Born2beroot
+### Create the crontab for Born2beroot
 
-Toujours en tant qu’utilisateur root, il faut créer la crontab en ajoutant la ligne suivante dans le fichier ouvert par **`crontab -e` :**
+Still as the root user, you must create the crontab by adding the following line in the file opened by **`crontab -e`:**
 
-**`*/10 * * * * bash /root/monitoring.sh`** 
+**`*/10 * * * * bash /root/monitoring.sh`**
 
-Le mot “bash” dans la ligne signifie que le fichier doit être exécuté en tant que script bash, mais sa présence n’est normalement pas nécessaire si vous avez bien mis le **shebang** au début de votre fichier.
+The word "bash" in the line means that the file must be executed as a bash script, but its presence is not normally necessary if you have put the **shebang** at the beginning of your file.
 
-A partir de là, le scipt monitoring.h va être exécuté toutes les dix minutes (par exemple à 14h10, puis 14h20, puis 14h30, etc). Or le sujet spécifie qu’il doit être exécuté toutes les dix minutes à partir du démarrage du système. Nous allons devoir créer un petit script pour calculer le délai entre l’heure de démarrage du système et la plus proche dizaine de minute pour appliquer ce délai à l’exécution de notre script.
+From there, the monitoring.sh script will be executed every ten minutes (for example at 2:10 PM, then 2:20 PM, then 2:30 PM, etc.). However, the subject specifies that it must be executed every ten minutes from the system startup. We will have to create a small script to calculate the delay between the system startup time and the nearest ten minutes to apply this delay to the execution of our script.
 
-### Créer le script sleep.sh
+### Create the sleep.sh script
 
-Toujours dans le dossier root et en tant qu’utilisateur root, créez un fichier sleep.h contenant le script suivant qui utilise la commande sleep.
+Still in the root folder and as the root user, create a sleep.h file containing the following script which uses the sleep command.
 
-La commande **`sleep` suspend l’exécution d’un script pendant un temps spécifié.**
+The **`sleep` command suspends the execution of a script for a specified time.**
 
 ```bash
 #!bin/bash
 
-# Recueration des minutes de boot et sec
+# Get boot minutes and seconds
 boot_min=$(uptime -s | cut -c 15-16)
 boot_sec=$(uptime -s | cut -c 18-19)
 
-# On calcul le nombre de minutes qui nous separt de la 10ene la plus proche
-# Pour 18:42:23
-# 42%10 = 2 donc 2 minutes de l'ecart avec la 10ene la plus proche qui est 40
-# 2*60 = 120 pour convertir en seconde
-# 120+23 = 143 seconde entre la 10ene la plus proche
+# We calculate the number of minutes that separates us from the nearest 10
+# For 18:42:23
+# 42%10 = 2 so 2 minutes of difference with the nearest 10 which is 40
+# 2*60 = 120 to convert to seconds
+# 120+23 = 143 seconds between the nearest 10
 delay=$(bc <<< $boot_min%10*60+$boot_sec)
 
-#on passe les seconde au sleep pour avoir notre delay
+#we pass the seconds to sleep to have our delay
 sleep $delay
 ```
 
-Modifiez ensuite la ligne précédemment créée dans la crontab comme suit:
+Then modify the previously created line in the crontab as follows:
 
-**`*/10 * * * * bash /root/sleep.sh && bash /root/monitoring.sh`** 
+**`*/10 * * * * bash /root/sleep.sh && bash /root/monitoring.sh`**
 
-L’opérateur logique AND **`&&`** permet d'exécuter la commande suivante **uniquement si la commande précédente a réussi** (c'est-à-dire que la commande précédente s'est terminée avec un code de sortie de 0, indiquant un succès).
+The logical AND operator **`&&`** allows the next command to be executed **only if the previous command was successful** (i.e. the previous command terminated with an exit code of 0, indicating success).
 
-Cette ligne dans le fichier crontab va exécuter deux scripts à intervalles réguliers. Voici ce qu'elle fait en détail :
+This line in the crontab file will execute two scripts at regular intervals. Here is what it does in detail:
 
-- **`/10 * * * *`** : Cela signifie que la commande doit être exécutée toutes les 10 minutes (chaque minute qui est un multiple de 10).
-- **`bash /root/sleep.sh`** : Le script `/root/sleep.sh` sera exécuté en premier.
-- **`&&`** : Si le premier script (`sleep.sh`) s'exécute correctement (sans erreur), alors le deuxième script sera exécuté.
-- **`bash /root/monitoring.sh`** : Le script `/root/monitoring.sh` sera exécuté **uniquement si** le premier script s'est terminé avec succès.
+-   **`/10 * * * *`**: This means that the command must be executed every 10 minutes (every minute that is a multiple of 10).
+-   **`bash /root/sleep.sh`**: The `/root/sleep.sh` script will be executed first.
+-   **`&&`**: If the first script (`sleep.sh`) executes correctly (without error), then the second script will be executed.
+-   **`bash /root/monitoring.sh`**: The `/root/monitoring.sh` script will be executed **only if** the first script has terminated successfully.
 
-En résumé, cette ligne va lancer le script `sleep.sh` toutes les 10 minutes, et si ce script réussit (après avoir appliqué le délai imposé par la commande sleep), il lancera  `monitoring.sh` .
+In summary, this line will launch the `sleep.sh` script every 10 minutes, and if this script succeeds (after applying the delay imposed by the sleep command), it will launch `monitoring.sh`.
 
-## Le fichier signature.txt
+## The signature.txt file
 
-**Pour créer le fichier** il suffit d’aller dans le répertoire où est stockées la VM et d’exécuter **`shasum` sur le fichier .vdi de votre VM.**
+**To create the file** you just need to go to the directory where the VM is stored and execute **`shasum` on your VM's .vdi file.**
 
-### C’est quoi shasum?
+### What is shasum?
 
-**Shasum** est une commande utilisée pour calculer et vérifier les empreintes cryptographiques (ou "hashes") de fichiers, en utilisant des algorithmes SHA (Secure Hash Algorithm) comme SHA-1, SHA-256, etc. Elle sert principalement à vérifier l'intégrité et l'authenticité des fichiers. Elle crée un hash, qui est une empreinte numérique unique générée à partir de données, utilisée pour vérifier l'intégrité ou l'authenticité.
+**Shasum** is a command used to calculate and verify the cryptographic fingerprints (or "hashes") of files, using SHA (Secure Hash Algorithm) algorithms such as SHA-1, SHA-256, etc. It is mainly used to verify the integrity and authenticity of files. It creates a hash, which is a unique digital fingerprint generated from data, used to verify integrity or authenticity.
 
-C’est quoi un fichier VDI?
+What is a VDI file?
 
-**U**n fichier **VDI** (Virtual Disk Image) est un format de fichier utilisé par **VirtualBox** pour représenter un disque dur virtuel. Ce fichier contient toutes les données du système invité (comme un disque dur réel) et permet à la machine virtuelle d’accéder à un espace de stockage pour son système d'exploitation et ses fichiers.
+A **VDI** (Virtual Disk Image) file is a file format used by **VirtualBox** to represent a virtual hard disk. This file contains all the data of the guest system (like a real hard disk) and allows the virtual machine to access a storage space for its operating system and its files.
 
-**`~/Virtualbox VMS`**  est le répertoire de destination par défaut des VM sur Mac. Votre VM sera donc stockée dans le répertoire **`~/Virtualbox VMS/NomDeLaVM`** 
+**`~/Virtualbox VMS`** is the default destination directory for VMs on Mac. Your VM will therefore be stored in the **`~/Virtualbox VMS/NameOfYourVM`** directory
 
-**`shasum NomDeLaVm.vdi > signature.txt`**  est la commande à exécuter pour créer l’empreinte de votre fichier et la stocker dans le fichier signature.txt (que sera créé en exécutant cette commande). La sortie de shasum stockée dans signature.txt sera le hash (une chaîne alphanumérique) suivi du nom du fichier analysé (si l’exécution de la commande prend un peu de temps, pas d’affolement, c’est normal). Par exemple:
+**`shasum NameOfYourVm.vdi > signature.txt`** is the command to execute to create the fingerprint of your file and store it in the signature.txt file (which will be created by executing this command). The output of shasum stored in signature.txt will be the hash (an alphanumeric string) followed by the name of the analyzed file (if the execution of the command takes a little time, don't panic, it's normal). For example:
 
 a933ad77674444661a25fea08af33154550ddef7  Born2beroot.vdi
 
-**Pour comparer le fichier** avec sa signature, il suffira d’exécuter  **`shasum`** avec ****l’option **`-c`** suivi du nom du fichier signature (**`signature.txt`** en l’occurence).
+**To compare the file** with its signature, you will just have to execute **`shasum`** with the **`-c`** option followed by the name of the signature file (**`signature.txt`** in this case).
 
-La commande **`shasum -c signature.txt`** permet ainsi  de vérifier l'intégrité d'un fichier en comparant son hash avec celui stocké dans un fichier de signature. Lors de la vérification, si le hash correspond, la commande affichera **`fichier.txt: OK`**, sinon une erreur indiquera que le fichier a été modifié.
+The command **`shasum -c signature.txt`** thus allows you to verify the integrity of a file by comparing its hash with the one stored in a signature file. During verification, if the hash matches, the command will display **`file.txt: OK`**, otherwise an error will indicate that the file has been modified.
